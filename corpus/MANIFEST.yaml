@@ -1,0 +1,65 @@
+documents:
+  - path: northwind_restoration/registry_extract.md
+    company: Northwind Restoration Ltd
+    source_type: registry
+    retrieved: "2026-06-22"
+  - path: northwind_restoration/adverse_media.md
+    company: Northwind Restoration Ltd
+    source_type: adverse_media
+    retrieved: "2026-06-22"
+  - path: northwind_restoration/press_release.md
+    company: Northwind Restoration Ltd
+    source_type: press_release
+    retrieved: "2026-06-22"
+  - path: northwind_restoration/sanctions_check.md
+    company: Northwind Restoration Ltd
+    source_type: sanctions_check
+    retrieved: "2026-06-22"
+  - path: meridian_carbon_partners/registry_extract.md
+    company: Meridian Carbon Partners LLP
+    source_type: registry
+    retrieved: "2026-06-22"
+  - path: meridian_carbon_partners/adverse_media.md
+    company: Meridian Carbon Partners LLP
+    source_type: adverse_media
+    retrieved: "2026-06-22"
+  - path: meridian_carbon_partners/press_release.md
+    company: Meridian Carbon Partners LLP
+    source_type: press_release
+    retrieved: "2026-06-22"
+  - path: meridian_carbon_partners/sanctions_check.md
+    company: Meridian Carbon Partners LLP
+    source_type: sanctions_check
+    retrieved: "2026-06-22"
+  - path: atlas_offset_holdings/registry_extract.md
+    company: Atlas Offset Holdings SA
+    source_type: registry
+    retrieved: "2026-06-22"
+  - path: atlas_offset_holdings/adverse_media.md
+    company: Atlas Offset Holdings SA
+    source_type: adverse_media
+    retrieved: "2026-06-22"
+  - path: atlas_offset_holdings/press_release.md
+    company: Atlas Offset Holdings SA
+    source_type: press_release
+    retrieved: "2026-06-22"
+  - path: atlas_offset_holdings/sanctions_check.md
+    company: Atlas Offset Holdings SA
+    source_type: sanctions_check
+    retrieved: "2026-06-22"
+  - path: verdant_capital_ltd/registry_extract.md
+    company: Verdant Capital Ltd
+    source_type: registry
+    retrieved: "2026-06-22"
+  - path: verdant_capital_ltd/adverse_media.md
+    company: Verdant Capital Ltd
+    source_type: adverse_media
+    retrieved: "2026-06-22"
+  - path: verdant_capital_ltd/press_release.md
+    company: Verdant Capital Ltd
+    source_type: press_release
+    retrieved: "2026-06-22"
+  - path: verdant_capital_ltd/sanctions_check.md
+    company: Verdant Capital Ltd
+    source_type: sanctions_check
+    retrieved: "2026-06-22"
