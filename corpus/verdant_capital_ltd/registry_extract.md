@@ -7,7 +7,7 @@ Registered legal name: Verdant Capital Ltd.
 Legal form: Private Limited Company (Ltd).
 Registration number: VC-5590028.
 Country of incorporation: United Kingdom.
-Registered office address: 11 Threadneedle Lane, London EC2R 4AA, United Kingdom.
+Registered office address: 30 Inventor Row, London EC2V 7HH, United Kingdom.
 Date of incorporation: 28 September 2021.
 
 ## Status

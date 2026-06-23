@@ -7,7 +7,7 @@ Registered legal name: Northwind Restoration Ltd.
 Legal form: Private Limited Company (Ltd).
 Registration number: NW-4471203.
 Country of incorporation: United Kingdom.
-Registered office address: 22 Canal Wharf, Leeds LS11 5BD, United Kingdom.
+Registered office address: 56 Fabricated Lane, Leeds LS12 8PP, United Kingdom.
 Date of incorporation: 04 March 2018.
 
 ## Status

@@ -7,7 +7,7 @@ Registered legal name: Meridian Carbon Partners LLP.
 Legal form: Limited Liability Partnership (LLP).
 Registration number: MC-8830017.
 Country of incorporation: Ireland.
-Registered office address: 4 Harbour Square, Dublin 2, Ireland.
+Registered office address: 7 Parnell Mews, Dublin 1, Ireland.
 Date of incorporation: 19 July 2020.
 
 ## Status

@@ -7,7 +7,7 @@ Registered legal name: Atlas Offset Holdings SA.
 Legal form: Societe Anonyme (SA).
 Registration number: AO-2026114.
 Country of incorporation: Switzerland.
-Registered office address: Bahnhofstrasse 78, 8001 Zurich, Switzerland.
+Registered office address: Fiktivstrasse 12, 8000 Zurich, Switzerland.
 Date of incorporation: 11 January 2017.
 
 ## Status
