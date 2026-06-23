@@ -184,3 +184,10 @@ q24:
   gold_answer: "The registry extract identifies Dorian Salgrave as a controlling shareholder holding 55% of issued shares, domiciled in the fictional jurisdiction of Archovia. The sanctions check confirms that this individual is listed on the fictional Office of Restricted Entities register, creating an indirect exposure flag for the company under the applicable fictional compliance framework. The company itself is not a named entry on any sanctions list, but the ownership nexus represents a material compliance consideration."
   gold_label: "The registry extract identifies Dorian Salgrave as a controlling shareholder holding 55% of issued shares, domiciled in the fictional jurisdiction of Archovia. The sanctions check confirms that this individual is listed on the fictional Office of Restricted Entities register, creating an indirect exposure flag for the company under the applicable fictional compliance framework. The company itself is not a named entry on any sanctions list, but the ownership nexus represents a material compliance consideration."
   source_ref: atlas_offset_holdings/sanctions_check.md
+
+q25:
+  company: Meridian Carbon Partners LLP
+  question: "What did the adverse media screen find for Meridian Carbon Partners, and have any charges been filed?"
+  gold_answer: "The Fictional Markets Oversight Authority (FMOA) opened a formal investigation into Meridian Carbon Partners LLP in February 2026 concerning alleged deficiencies in project-level disclosure practices for voluntary carbon credits sold to institutional buyers. The FMOA has not issued any finding of wrongdoing; the investigation is ongoing and no charges have been filed."
+  gold_label: "The Fictional Markets Oversight Authority (FMOA) opened a formal investigation into Meridian Carbon Partners LLP in February 2026 concerning alleged deficiencies in project-level disclosure practices for voluntary carbon credits sold to institutional buyers. The FMOA has not issued any finding of wrongdoing; the investigation is ongoing and no charges have been filed."
+  source_ref: meridian_carbon_partners/adverse_media.md

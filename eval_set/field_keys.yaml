@@ -37,3 +37,4 @@ q23: {method: binary,    gate_id: G4}
 
 # G5 JUDGE / RELEVANCY
 q24: {method: judge,     gate_id: G5, relevancy: true}
+q25: {method: judge,     gate_id: G5, relevancy: true}
