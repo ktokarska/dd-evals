@@ -33,7 +33,7 @@ def reliability_bins(points: List[Tuple[float, bool]], n_bins: int = 5) -> List[
         if i == n_bins - 1:
             members = [c for conf, c in points if lo <= conf <= hi]
         else:
-            members = [c for conf, c in points if lo <= conf <= hi]
+            members = [c for conf, c in points if lo <= conf < hi]
         n = len(members)
         acc = (sum(1 for c in members if c) / n) if n else 0.0
         bins.append({"lo": lo, "hi": hi, "n": n, "empirical_accuracy": acc})
