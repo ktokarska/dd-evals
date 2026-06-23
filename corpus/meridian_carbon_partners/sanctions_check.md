@@ -1,4 +1,4 @@
-# Sanctions Screening Report — Meridian Carbon Partners LLP
+# Sanctions Screening Report : Meridian Carbon Partners LLP
 
 > Fictional entity, for testing only. No real entity is described.
 

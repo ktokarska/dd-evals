@@ -1,4 +1,4 @@
-# Companies Registry Extract — Northwind Restoration Ltd
+# Companies Registry Extract : Northwind Restoration Ltd
 
 > Fictional entity, for testing only. No real entity is described.
 

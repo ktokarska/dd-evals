@@ -1,4 +1,4 @@
-# Adverse Media Screen — Northwind Restoration Ltd
+# Adverse Media Screen : Northwind Restoration Ltd
 
 > Fictional entity, for testing only. No real entity is described.
 

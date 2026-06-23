@@ -1,4 +1,4 @@
-# Press Release — Meridian Carbon Partners LLP Launches Afforestation Fund
+# Press Release : Meridian Carbon Partners LLP Launches Afforestation Fund
 
 > Fictional entity, for testing only. No real entity is described.
 

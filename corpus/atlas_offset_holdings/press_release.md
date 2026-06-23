@@ -1,4 +1,4 @@
-# Press Release — Atlas Offset Holdings SA Expands Carbon Portfolio
+# Press Release : Atlas Offset Holdings SA Expands Carbon Portfolio
 
 > Fictional entity, for testing only. No real entity is described.
 

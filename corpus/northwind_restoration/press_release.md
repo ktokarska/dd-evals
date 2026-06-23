@@ -1,4 +1,4 @@
-# Press Release — Northwind Restoration Ltd Achieves B Corp Certification
+# Press Release : Northwind Restoration Ltd Achieves B Corp Certification
 
 > Fictional entity, for testing only. No real entity is described.
 

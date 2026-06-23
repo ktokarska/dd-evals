@@ -1,4 +1,4 @@
-# Adverse Media Screen — Atlas Offset Holdings SA
+# Adverse Media Screen : Atlas Offset Holdings SA
 
 > Fictional entity, for testing only. No real entity is described.
 

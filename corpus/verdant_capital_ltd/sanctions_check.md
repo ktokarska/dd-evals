@@ -1,4 +1,4 @@
-# Sanctions Screening Report — Verdant Capital Ltd
+# Sanctions Screening Report : Verdant Capital Ltd
 
 > Fictional entity, for testing only. No real entity is described.
 

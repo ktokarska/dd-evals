@@ -1,4 +1,4 @@
-# Companies Registry Extract — Verdant Capital Ltd
+# Companies Registry Extract : Verdant Capital Ltd
 
 > Fictional entity, for testing only. No real entity is described.
 

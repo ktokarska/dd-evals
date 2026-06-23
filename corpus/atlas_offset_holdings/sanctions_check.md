@@ -1,4 +1,4 @@
-# Sanctions Screening Report — Atlas Offset Holdings SA
+# Sanctions Screening Report : Atlas Offset Holdings SA
 
 > Fictional entity, for testing only. No real entity is described.
 

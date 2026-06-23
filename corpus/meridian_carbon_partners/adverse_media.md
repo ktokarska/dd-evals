@@ -1,4 +1,4 @@
-# Adverse Media Screen — Meridian Carbon Partners LLP
+# Adverse Media Screen : Meridian Carbon Partners LLP
 
 > Fictional entity, for testing only. No real entity is described.
 

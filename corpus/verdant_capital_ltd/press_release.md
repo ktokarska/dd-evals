@@ -1,4 +1,4 @@
-# Statement — Verdant Capital Ltd
+# Statement : Verdant Capital Ltd
 
 > Fictional entity, for testing only. No real entity is described.
 

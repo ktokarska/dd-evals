@@ -1,4 +1,4 @@
-# Companies Registry Extract — Atlas Offset Holdings SA
+# Companies Registry Extract : Atlas Offset Holdings SA
 
 > Fictional entity, for testing only. No real entity is described.
 

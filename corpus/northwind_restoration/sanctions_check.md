@@ -1,4 +1,4 @@
-# Sanctions Screening Report — Northwind Restoration Ltd
+# Sanctions Screening Report : Northwind Restoration Ltd
 
 > Fictional entity, for testing only. No real entity is described.
 

@@ -1,4 +1,4 @@
-# Adverse Media Screen — Verdant Capital Ltd
+# Adverse Media Screen : Verdant Capital Ltd
 
 > Fictional entity, for testing only. No real entity is described.
 
