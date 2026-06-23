@@ -1,0 +1,11 @@
+{
+  "q12": {"score": 1.0, "reason": "All claims supported by the cited registry extract: two directors named, Helen Marsh (Managing Director) and Tomas Reuben (Finance Director), with roles matching the source."},
+  "q13": {"score": 0.5, "reason": "Two of four atomic claims are unsupported by the cited press release: the award year 2019 and the overall verified score of 95.2 points do not appear in the source. The certification body and the ESG evaluation are supported. Unsupported numeric and date claims fail the faithfulness bar."},
+  "q14": {"score": 1.0, "reason": "All claims supported: two designated members, Ciara Flannagan (Managing Partner) and Ondrej Blaha (Operations Partner), match the cited registry extract."},
+  "q15": {"score": 1.0, "reason": "All claims supported by the cited adverse media screen: the FMOA investigation, the February 2026 timing, the disclosure-practice subject, and the no-charges-filed, investigation-ongoing status."},
+  "q16": {"score": 1.0, "reason": "All claims supported: two board members, Franz Hofer (Chairman) and Priya Venkataraman (Executive Director), match the cited registry extract."},
+  "q17": {"score": 1.0, "reason": "All claims supported by the cited sanctions check: the match on Dorian Salgrave, the 55% controlling interest, the ORE listing, the company not being a named entry, and the indirect-exposure flag."},
+  "q18": {"score": 1.0, "reason": "All claims supported by the cited press release: B Corp status applies to the full legal entity Northwind Restoration Ltd, with the correct registration number, following the ESG evaluation."},
+  "q24": {"score": 1.0, "reason": "Every statement addresses the beneficial-ownership compliance risk asked about and is drawn from the two cited documents; the answer is fully on-topic with no irrelevant content."},
+  "q25": {"score": 1.0, "reason": "The answer addresses both parts of the question, the adverse-media finding and whether charges were filed, with no off-topic statements; fully relevant."}
+}

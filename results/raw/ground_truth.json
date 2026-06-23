@@ -1,0 +1,10 @@
+{
+  "_note": "Ground-truth label per field for this demo run: should the answer pass? Every system-under-test answer is sound except q13, which fabricates a B Corp award year and score not present in the source. The harness is expected to agree with these labels.",
+  "labels": {
+    "q01": true, "q02": true, "q03": true, "q04": true, "q05": true,
+    "q06": true, "q07": true, "q08": true, "q09": true, "q10": true,
+    "q11": true, "q12": true, "q13": false, "q14": true, "q15": true,
+    "q16": true, "q17": true, "q18": true, "q19": true, "q20": true,
+    "q21": true, "q22": true, "q23": true, "q24": true, "q25": true
+  }
+}

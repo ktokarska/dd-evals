@@ -1,0 +1,21 @@
+{
+  "baseline_overall": "pass",
+  "mutations": [
+    {
+      "name": "flip exact field q01",
+      "gate_id": "G1",
+      "caught": true
+    },
+    {
+      "name": "blank judged answer q12",
+      "gate_id": "G2",
+      "caught": true
+    },
+    {
+      "name": "flip binary q21 yes->no",
+      "gate_id": "G4",
+      "caught": true
+    }
+  ],
+  "all_caught": true
+}

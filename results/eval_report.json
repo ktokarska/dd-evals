@@ -1,0 +1,237 @@
+{
+  "per_field": [
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "match",
+      "id": "q01"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "match",
+      "id": "q02"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "match",
+      "id": "q03"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "match",
+      "id": "q04"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "match",
+      "id": "q05"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "match",
+      "id": "q06"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "match",
+      "id": "q07"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "match",
+      "id": "q08"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "match",
+      "id": "q09"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "match",
+      "id": "q10"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G1",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "within tolerance",
+      "id": "q11"
+    },
+    {
+      "metric": "Faithfulness",
+      "gate_id": "G2",
+      "score": 1.0,
+      "threshold": 0.98,
+      "success": true,
+      "reason": "All claims supported by the cited registry extract: two directors named, Helen Marsh (Managing Director) and Tomas Reuben (Finance Director), with roles matching the source.",
+      "id": "q12"
+    },
+    {
+      "metric": "Faithfulness",
+      "gate_id": "G2",
+      "score": 0.5,
+      "threshold": 0.98,
+      "success": false,
+      "reason": "Two of four atomic claims are unsupported by the cited press release: the award year 2019 and the overall verified score of 95.2 points do not appear in the source. The certification body and the ESG evaluation are supported. Unsupported numeric and date claims fail the faithfulness bar.",
+      "id": "q13"
+    },
+    {
+      "metric": "Faithfulness",
+      "gate_id": "G2",
+      "score": 1.0,
+      "threshold": 0.98,
+      "success": true,
+      "reason": "All claims supported: two designated members, Ciara Flannagan (Managing Partner) and Ondrej Blaha (Operations Partner), match the cited registry extract.",
+      "id": "q14"
+    },
+    {
+      "metric": "Faithfulness",
+      "gate_id": "G2",
+      "score": 1.0,
+      "threshold": 0.98,
+      "success": true,
+      "reason": "All claims supported by the cited adverse media screen: the FMOA investigation, the February 2026 timing, the disclosure-practice subject, and the no-charges-filed, investigation-ongoing status.",
+      "id": "q15"
+    },
+    {
+      "metric": "Faithfulness",
+      "gate_id": "G2",
+      "score": 1.0,
+      "threshold": 0.98,
+      "success": true,
+      "reason": "All claims supported: two board members, Franz Hofer (Chairman) and Priya Venkataraman (Executive Director), match the cited registry extract.",
+      "id": "q16"
+    },
+    {
+      "metric": "Faithfulness",
+      "gate_id": "G2",
+      "score": 1.0,
+      "threshold": 0.98,
+      "success": true,
+      "reason": "All claims supported by the cited sanctions check: the match on Dorian Salgrave, the 55% controlling interest, the ORE listing, the company not being a named entry, and the indirect-exposure flag.",
+      "id": "q17"
+    },
+    {
+      "metric": "Faithfulness",
+      "gate_id": "G2",
+      "score": 1.0,
+      "threshold": 0.98,
+      "success": true,
+      "reason": "All claims supported by the cited press release: B Corp status applies to the full legal entity Northwind Restoration Ltd, with the correct registration number, following the ESG evaluation.",
+      "id": "q18"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G3",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "rendered the not-found sentinel",
+      "id": "q19"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G3",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "rendered the not-found sentinel",
+      "id": "q20"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G4",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "binary match",
+      "id": "q21"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G4",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "binary match",
+      "id": "q22"
+    },
+    {
+      "metric": "deterministic",
+      "gate_id": "G4",
+      "score": 1.0,
+      "threshold": 1.0,
+      "success": true,
+      "reason": "binary match",
+      "id": "q23"
+    },
+    {
+      "metric": "Answer Relevancy",
+      "gate_id": "G5",
+      "score": 1.0,
+      "threshold": 0.9,
+      "success": true,
+      "reason": "Every statement addresses the beneficial-ownership compliance risk asked about and is drawn from the two cited documents; the answer is fully on-topic with no irrelevant content.",
+      "id": "q24"
+    },
+    {
+      "metric": "Answer Relevancy",
+      "gate_id": "G5",
+      "score": 1.0,
+      "threshold": 0.9,
+      "success": true,
+      "reason": "The answer addresses both parts of the question, the adverse-media finding and whether charges were filed, with no off-topic statements; fully relevant.",
+      "id": "q25"
+    }
+  ],
+  "gates": {
+    "G1": "pass",
+    "G2": "fail",
+    "G3": "pass",
+    "G4": "pass",
+    "G5": "pass"
+  },
+  "overall": "fail"
+}
