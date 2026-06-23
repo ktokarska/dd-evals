@@ -60,13 +60,12 @@ def _score_absent(qid, spec, gold, ans) -> MetricRecord:
     return MetricRecord("deterministic", g, 1.0 if ok else 0.0, GATE_THRESHOLDS[g], ok, reason, field_id=qid)
 
 
+_YESNO = re.compile(r"(yes|no)\b")
+
+
 def _yesno(s: str) -> Optional[str]:
-    t = _norm(s)
-    if t.startswith("yes"):
-        return "yes"
-    if t.startswith("no"):
-        return "no"
-    return None
+    m = _YESNO.match(_norm(s))
+    return m.group(1) if m else None
 
 
 def _score_binary(qid, spec, gold, ans) -> MetricRecord:
@@ -125,14 +124,14 @@ def score_run(questions: Dict[str, dict], field_keys: Dict[str, dict],
         gate_results.setdefault(spec["gate_id"], []).append(rec.success)
 
     gates = {g: ("pass" if all(v) else "fail") for g, v in sorted(gate_results.items())}
-    overall = "pass" if all(v == "pass" for v in gates.values()) else "fail"
+    overall = "pass" if gates and all(v == "pass" for v in gates.values()) else "fail"
     report = {"per_field": per_field, "gates": gates, "overall": overall}
 
     if out_dir:
         target = Path(out_dir)
         target.mkdir(parents=True, exist_ok=True)
-        (target / "eval_report.json").write_text(json.dumps(report, indent=2))
-        (target / "eval_report.md").write_text(_render_md(report))
+        (target / "eval_report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+        (target / "eval_report.md").write_text(_render_md(report), encoding="utf-8")
     return report
 
 

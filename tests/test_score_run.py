@@ -98,3 +98,49 @@ def test_writes_report_files(tmp_path):
     rep = json.loads((tmp_path / "eval_report.json").read_text())
     assert rep["overall"] == "pass"
     assert (tmp_path / "eval_report.md").exists()
+
+
+def test_binary_sentinel_answer_does_not_pass_a_no_gold():
+    # A model refusal (sentinel string) on a G4 binary field with gold "no" must FAIL,
+    # not be credited as a correct "no" answer.
+    rep = sr.score_run(QUESTIONS, FIELD_KEYS, _answers(q5=SENTINEL), FakeJudge(1.0))
+    rec = [r for r in rep["per_field"] if r["id"] == "q5"][0]
+    assert rec["success"] is False
+    assert rep["gates"]["G4"] == "fail"
+
+
+def test_binary_none_answer_does_not_pass():
+    # "None" starts with "no" but must not classify as a "no" answer.
+    rep = sr.score_run(QUESTIONS, FIELD_KEYS, _answers(q5="None"), FakeJudge(1.0))
+    rec = [r for r in rep["per_field"] if r["id"] == "q5"][0]
+    assert rec["success"] is False
+    assert rep["gates"]["G4"] == "fail"
+
+
+def test_g5_relevancy_routes_to_answer_relevancy():
+    # A G5 judge field must route to run_answer_relevancy and use threshold 0.90.
+    questions_g5 = dict(QUESTIONS)
+    questions_g5["q6"] = {
+        "company": "Acme", "question": "what is the product?",
+        "gold_answer": "carbon credits", "gold_label": "carbon credits", "source_ref": "x",
+    }
+    field_keys_g5 = dict(FIELD_KEYS)
+    field_keys_g5["q6"] = {"method": "judge", "gate_id": "G5"}
+
+    answers_g5_pass = _answers(q6="carbon credits")
+    rep_pass = sr.score_run(questions_g5, field_keys_g5, answers_g5_pass, FakeJudge(0.95))
+    rec_pass = [r for r in rep_pass["per_field"] if r["id"] == "q6"][0]
+    assert rec_pass["metric"] == "Answer Relevancy"
+    assert rec_pass["threshold"] == 0.90
+    assert rec_pass["success"] is True
+
+    rep_fail = sr.score_run(questions_g5, field_keys_g5, answers_g5_pass, FakeJudge(0.85))
+    rec_fail = [r for r in rep_fail["per_field"] if r["id"] == "q6"][0]
+    assert rec_fail["metric"] == "Answer Relevancy"
+    assert rec_fail["success"] is False
+    assert rep_fail["gates"]["G5"] == "fail"
+
+
+def test_empty_field_keys_is_not_a_pass():
+    rep = sr.score_run(QUESTIONS, {}, _answers(), FakeJudge(1.0))
+    assert rep["overall"] == "fail"
