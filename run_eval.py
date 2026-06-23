@@ -20,7 +20,7 @@ import yaml  # noqa: E402
 import retrieve  # noqa: E402
 import answer as answer_mod  # noqa: E402
 import judge_runner as jr  # noqa: E402
-from score_run import score_run, SENTINEL, GATE_THRESHOLDS  # noqa: E402
+from score_run import score_run  # noqa: E402
 import metrics  # noqa: E402
 
 EVAL_SET = ROOT / "eval_set"
@@ -31,24 +31,6 @@ def _load_eval_set():
     questions = yaml.safe_load((EVAL_SET / "questions.yaml").read_text(encoding="utf-8"))
     field_keys = yaml.safe_load((EVAL_SET / "field_keys.yaml").read_text(encoding="utf-8"))
     return questions, field_keys
-
-
-class ReplayJudge:
-    """Returns the recorded verdict for the field currently being scored."""
-    def __init__(self, verdicts: Dict[str, dict]):
-        self._v = verdicts
-        self._qid: Optional[str] = None
-    def for_qid(self, qid: str):
-        self._qid = qid
-        return self
-    def _get(self):
-        return self._v.get(self._qid, {"score": 0.0, "reason": "no recorded verdict"})
-    def run_geval(self, case):
-        return self._get()
-    def run_faithfulness(self, case):
-        return self._get()
-    def run_answer_relevancy(self, case):
-        return self._get()
 
 
 def _score_with_replay(questions, field_keys, answers, verdicts, out_dir):
@@ -75,11 +57,11 @@ def _score_with_replay(questions, field_keys, answers, verdicts, out_dir):
         per_field.append(record_to_dict(rec, include_id=True))
         gate_results.setdefault(spec["gate_id"], []).append(rec.success)
     gates = {g: ("pass" if all(v) else "fail") for g, v in sorted(gate_results.items())}
-    overall = "pass" if all(v == "pass" for v in gates.values()) else "fail"
+    overall = "pass" if gates and all(v == "pass" for v in gates.values()) else "fail"
     report = {"per_field": per_field, "gates": gates, "overall": overall}
     target = Path(out_dir); target.mkdir(parents=True, exist_ok=True)
-    (target / "eval_report.json").write_text(json.dumps(report, indent=2))
-    (target / "eval_report.md").write_text(sr._render_md(report))
+    (target / "eval_report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    (target / "eval_report.md").write_text(sr._render_md(report), encoding="utf-8")
     return report
 
 
@@ -122,7 +104,7 @@ def run(mode: str, out_dir: str, raw_dir: Optional[str] = None,
             def run_answer_relevancy(self, case):
                 return jr.run_answer_relevancy(case, client=judge_client)
 
-        answers, contexts, verdicts = {}, {}, {}
+        answers, contexts = {}, {}
         for qid, q in questions.items():
             company = q["source_ref"].split("/")[0]
             hits = retrieve.retrieve(q["question"], corpus, company=company, k=3)
@@ -130,9 +112,13 @@ def run(mode: str, out_dir: str, raw_dir: Optional[str] = None,
             answers[qid] = answer_mod.answer_question(q["question"], hits, client=ans_client)
         report = score_run(questions, field_keys, answers, LiveJudge(),
                            contexts=contexts, out_dir=out_dir)
-        # record raw for reproducibility
+        # record raw for reproducibility and so replay mode can re-run
+        JUDGED_METRICS = {"Faithfulness", "Answer Relevancy", "G-Eval"}
+        verdicts = {r["id"]: {"score": r["score"], "reason": r["reason"]}
+                    for r in report["per_field"] if r["metric"] in JUDGED_METRICS}
         raw = Path(raw_dir or (ROOT / "results" / "raw")); raw.mkdir(parents=True, exist_ok=True)
-        (raw / "answers.json").write_text(json.dumps(answers, indent=2))
+        (raw / "answers.json").write_text(json.dumps(answers, indent=2), encoding="utf-8")
+        (raw / "judge_verdicts.json").write_text(json.dumps(verdicts, indent=2), encoding="utf-8")
         _emit_plots(report, verdicts, out_dir)
         return report
 

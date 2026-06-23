@@ -41,3 +41,14 @@ def test_replay_scores_without_network(tmp_path, monkeypatch):
     assert (out / "eval_report.json").exists()
     assert (out / "confusion.png").exists()
     assert (out / "reliability.png").exists()
+
+
+def test_replay_empty_field_keys_is_not_a_pass(tmp_path):
+    out = tmp_path / "results"
+    raw = tmp_path / "raw"
+    raw.mkdir(parents=True, exist_ok=True)
+    (raw / "answers.json").write_text(json.dumps({}))
+    (raw / "judge_verdicts.json").write_text(json.dumps({}))
+    rep = run_eval.run(mode="replay", out_dir=str(out), raw_dir=str(raw),
+                       questions={}, field_keys={})
+    assert rep["overall"] == "fail"
