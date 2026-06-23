@@ -28,11 +28,11 @@ class AnthropicJudgeClient:
 
     def __init__(self, api_key: Optional[str] = None) -> None:
         import anthropic  # lazy so the harness loads without the SDK
-        self._client = anthropic.Anthropic(api_key=api_key) if api_key else anthropic.Anthropic()
+        self._client = anthropic.Anthropic(api_key=api_key) if api_key is not None else anthropic.Anthropic()
 
     def complete(self, *, model: str, temperature: float, system: str, user: str) -> str:
         resp = self._client.messages.create(
-            model=model, max_tokens=512, temperature=temperature,
+            model=model, max_tokens=1024, temperature=temperature,
             system=system, messages=[{"role": "user", "content": user}],
         )
         return "".join(b.text for b in resp.content if getattr(b, "type", "") == "text")
@@ -72,7 +72,7 @@ def _build_user(rubric_name: str, rubric: Dict[str, str], case: Dict[str, Any], 
 
 
 def _parse(raw: str) -> Dict[str, Any]:
-    m = re.search(r"\{.*\}", raw, re.DOTALL)
+    m = re.search(r"\{[^{}]*\}", raw)
     if not m:
         raise JudgeParseError(f"no JSON object in judge reply: {raw[:120]!r}")
     obj = json.loads(m.group(0))
@@ -91,7 +91,7 @@ def _run(title: str, case: Dict[str, Any], client: Any) -> Dict[str, Any]:
         raw = client.complete(model=MODEL, temperature=TEMPERATURE, system=system, user=user)
         try:
             return _parse(raw)
-        except (JudgeParseError, ValueError, json.JSONDecodeError) as exc:
+        except (JudgeParseError, ValueError, json.JSONDecodeError, TypeError) as exc:
             last = exc
     raise JudgeParseError(f"judge output unparseable after retry: {last}")
 

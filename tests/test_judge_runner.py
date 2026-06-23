@@ -79,3 +79,13 @@ def test_parses_json_in_a_wrapper():
 def test_score_is_clamped_into_range():
     c = FakeClient('{"score": 1.5, "reason": "over"}')
     assert jr.run_geval(CASE, client=c)["score"] == 1.0
+
+
+def test_null_score_retries_then_raises():
+    c = FakeClient('{"score": null, "reason": "uncertain"}')
+    try:
+        jr.run_geval(CASE, client=c)
+        assert False, "expected JudgeParseError"
+    except jr.JudgeParseError:
+        pass
+    assert len(c.calls) == 2
