@@ -1,4 +1,4 @@
-# Eval set: 24 questions across four synthetic companies.
+# Eval set: 25 questions across four synthetic companies.
 # Gates: G1 (exact/tolerance), G2 (judge/faithfulness), G3 (absent), G4 (binary), G5 (judge/relevancy).
 
 # --- G1 EXACT: registration numbers, countries, incorporation dates ---

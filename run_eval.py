@@ -34,10 +34,9 @@ def _load_eval_set():
 
 
 def _score_with_replay(questions, field_keys, answers, verdicts, out_dir):
-    # score_run calls judge.run_* without the qid, so resolve verdicts by
-    # pre-binding: wrap each judged field in a per-qid judge via contexts.
-    # Simpler: monkey-free approach -> score deterministically here, and for
-    # judged fields read the recorded score directly.
+    # score_run's injected judge does not receive the qid, so here we score
+    # deterministic fields via score_run's helpers and read each judged field's
+    # recorded verdict by qid directly.
     from metric_record import MetricRecord, record_to_dict
     import score_run as sr
     per_field = []
