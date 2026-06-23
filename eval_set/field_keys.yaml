@@ -1,0 +1,39 @@
+# Field keys: one entry per qid in questions.yaml.
+# method: exact | tolerance | judge | absent | binary
+# gate_id: G1 | G2 | G3 | G4 | G5
+
+# G1 EXACT
+q01: {method: exact,     gate_id: G1}
+q02: {method: exact,     gate_id: G1}
+q03: {method: exact,     gate_id: G1}
+q04: {method: exact,     gate_id: G1}
+q05: {method: exact,     gate_id: G1}
+q06: {method: exact,     gate_id: G1}
+q07: {method: exact,     gate_id: G1}
+q08: {method: exact,     gate_id: G1}
+q09: {method: exact,     gate_id: G1}
+q10: {method: exact,     gate_id: G1}
+
+# G1 TOLERANCE (numeric, 2% band)
+q11: {method: tolerance, gate_id: G1, tolerance: {kind: numeric, rel: 0.02}}
+
+# G2 JUDGE / FAITHFULNESS
+q12: {method: judge,     gate_id: G2}
+q13: {method: judge,     gate_id: G2}
+q14: {method: judge,     gate_id: G2}
+q15: {method: judge,     gate_id: G2}
+q16: {method: judge,     gate_id: G2}
+q17: {method: judge,     gate_id: G2}
+q18: {method: judge,     gate_id: G2}
+
+# G3 ABSENT
+q19: {method: absent,    gate_id: G3}
+q20: {method: absent,    gate_id: G3}
+
+# G4 BINARY
+q21: {method: binary,    gate_id: G4}
+q22: {method: binary,    gate_id: G4}
+q23: {method: binary,    gate_id: G4}
+
+# G5 JUDGE / RELEVANCY
+q24: {method: judge,     gate_id: G5, relevancy: true}

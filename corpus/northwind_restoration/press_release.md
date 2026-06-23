@@ -11,5 +11,7 @@ The certification recognises the company's measurable commitments to worker welf
 
 The company operates across peatland and woodland restoration sites in northern England. B Corp status applies to the full legal entity, Northwind Restoration Ltd (registration number NW-4471203).
 
+Reported annual turnover: GBP 4,200,000 (FY2024).
+
 ---
 *Contact: communications@northwindrestoration.example (fictional)*

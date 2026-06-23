@@ -1,0 +1,186 @@
+# Eval set: 24 questions across four synthetic companies.
+# Gates: G1 (exact/tolerance), G2 (judge/faithfulness), G3 (absent), G4 (binary), G5 (judge/relevancy).
+
+# --- G1 EXACT: registration numbers, countries, incorporation dates ---
+
+q01:
+  company: Northwind Restoration Ltd
+  question: "What is the company registration number for Northwind Restoration Ltd?"
+  gold_answer: "NW-4471203"
+  gold_label: "NW-4471203"
+  source_ref: northwind_restoration/registry_extract.md
+
+q02:
+  company: Northwind Restoration Ltd
+  question: "In which country is Northwind Restoration Ltd incorporated?"
+  gold_answer: "United Kingdom"
+  gold_label: "United Kingdom"
+  source_ref: northwind_restoration/registry_extract.md
+
+q03:
+  company: Northwind Restoration Ltd
+  question: "What is the date of incorporation for Northwind Restoration Ltd?"
+  gold_answer: "04 March 2018"
+  gold_label: "04 March 2018"
+  source_ref: northwind_restoration/registry_extract.md
+
+q04:
+  company: Meridian Carbon Partners LLP
+  question: "What is the company registration number for Meridian Carbon Partners LLP?"
+  gold_answer: "MC-8830017"
+  gold_label: "MC-8830017"
+  source_ref: meridian_carbon_partners/registry_extract.md
+
+q05:
+  company: Meridian Carbon Partners LLP
+  question: "In which country is Meridian Carbon Partners LLP incorporated?"
+  gold_answer: "Ireland"
+  gold_label: "Ireland"
+  source_ref: meridian_carbon_partners/registry_extract.md
+
+q06:
+  company: Meridian Carbon Partners LLP
+  question: "What is the date of incorporation for Meridian Carbon Partners LLP?"
+  gold_answer: "19 July 2020"
+  gold_label: "19 July 2020"
+  source_ref: meridian_carbon_partners/registry_extract.md
+
+q07:
+  company: Atlas Offset Holdings SA
+  question: "What is the company registration number for Atlas Offset Holdings SA?"
+  gold_answer: "AO-2026114"
+  gold_label: "AO-2026114"
+  source_ref: atlas_offset_holdings/registry_extract.md
+
+q08:
+  company: Atlas Offset Holdings SA
+  question: "In which country is Atlas Offset Holdings SA incorporated?"
+  gold_answer: "Switzerland"
+  gold_label: "Switzerland"
+  source_ref: atlas_offset_holdings/registry_extract.md
+
+q09:
+  company: Verdant Capital Ltd
+  question: "What is the company registration number for Verdant Capital Ltd?"
+  gold_answer: "VC-5590028"
+  gold_label: "VC-5590028"
+  source_ref: verdant_capital_ltd/registry_extract.md
+
+q10:
+  company: Verdant Capital Ltd
+  question: "What is the date of incorporation for Verdant Capital Ltd?"
+  gold_answer: "28 September 2021"
+  gold_label: "28 September 2021"
+  source_ref: verdant_capital_ltd/registry_extract.md
+
+# --- G1 TOLERANCE: numeric turnover figure seeded into press_release ---
+
+q11:
+  company: Northwind Restoration Ltd
+  question: "What reported annual turnover figure (in GBP, as a number) is stated for Northwind Restoration Ltd in its press release?"
+  gold_answer: "4200000"
+  gold_label: "4200000"
+  source_ref: northwind_restoration/press_release.md
+
+# --- G2 JUDGE / FAITHFULNESS: summaries grounded in source docs ---
+
+q12:
+  company: Northwind Restoration Ltd
+  question: "Summarise the directors of Northwind Restoration Ltd and their roles, citing the source document."
+  gold_answer: "The registry extract records two directors: Helen Marsh (Managing Director) and Tomas Reuben (Finance Director)."
+  gold_label: "The registry extract records two directors: Helen Marsh (Managing Director) and Tomas Reuben (Finance Director)."
+  source_ref: northwind_restoration/registry_extract.md
+
+q13:
+  company: Northwind Restoration Ltd
+  question: "What certification does Northwind Restoration Ltd claim in its press release, and what body awarded it?"
+  gold_answer: "Northwind Restoration Ltd received B Corp certification from the fictional Certified B Corporation Assessment Body, awarded following a comprehensive evaluation of its environmental and social governance practices."
+  gold_label: "Northwind Restoration Ltd received B Corp certification from the fictional Certified B Corporation Assessment Body, awarded following a comprehensive evaluation of its environmental and social governance practices."
+  source_ref: northwind_restoration/press_release.md
+
+q14:
+  company: Meridian Carbon Partners LLP
+  question: "Summarise the designated members of Meridian Carbon Partners LLP and their roles, citing the registry extract."
+  gold_answer: "The registry extract records two designated members: Ciara Flannagan (Managing Partner) and Ondrej Blaha (Operations Partner)."
+  gold_label: "The registry extract records two designated members: Ciara Flannagan (Managing Partner) and Ondrej Blaha (Operations Partner)."
+  source_ref: meridian_carbon_partners/registry_extract.md
+
+q15:
+  company: Meridian Carbon Partners LLP
+  question: "What does the adverse media screen report about regulatory proceedings involving Meridian Carbon Partners LLP?"
+  gold_answer: "The Fictional Markets Oversight Authority (FMOA) opened a formal investigation into Meridian Carbon Partners LLP in February 2026 concerning alleged deficiencies in project-level disclosure practices for voluntary carbon credits. No finding of wrongdoing has been issued; the investigation is ongoing and no charges have been filed."
+  gold_label: "The Fictional Markets Oversight Authority (FMOA) opened a formal investigation into Meridian Carbon Partners LLP in February 2026 concerning alleged deficiencies in project-level disclosure practices for voluntary carbon credits. No finding of wrongdoing has been issued; the investigation is ongoing and no charges have been filed."
+  source_ref: meridian_carbon_partners/adverse_media.md
+
+q16:
+  company: Atlas Offset Holdings SA
+  question: "Summarise the board members of Atlas Offset Holdings SA and their roles as recorded in the registry extract."
+  gold_answer: "The registry extract records two board members: Franz Hofer (Chairman) and Priya Venkataraman (Executive Director)."
+  gold_label: "The registry extract records two board members: Franz Hofer (Chairman) and Priya Venkataraman (Executive Director)."
+  source_ref: atlas_offset_holdings/registry_extract.md
+
+q17:
+  company: Atlas Offset Holdings SA
+  question: "Summarise the sanctions screening findings for Atlas Offset Holdings SA, including the nature of the match and which individual is listed."
+  gold_answer: "A match was found: Dorian Salgrave, the controlling shareholder holding a 55% interest in Atlas Offset Holdings SA, is listed on the fictional Office of Restricted Entities (ORE) register. The company itself does not appear as a named entry, but the beneficial ownership nexus triggers an indirect exposure flag."
+  gold_label: "A match was found: Dorian Salgrave, the controlling shareholder holding a 55% interest in Atlas Offset Holdings SA, is listed on the fictional Office of Restricted Entities (ORE) register. The company itself does not appear as a named entry, but the beneficial ownership nexus triggers an indirect exposure flag."
+  source_ref: atlas_offset_holdings/sanctions_check.md
+
+# Near-miss edge case (G2): fact lives in press_release, NOT registry_extract.
+q18:
+  company: Northwind Restoration Ltd
+  question: "What does the press release say about Northwind Restoration Ltd's B Corp certification status and which legal entity does it apply to?"
+  gold_answer: "The press release confirms that B Corp status applies to the full legal entity, Northwind Restoration Ltd (registration number NW-4471203), following a comprehensive evaluation of its environmental and social governance practices."
+  gold_label: "The press release confirms that B Corp status applies to the full legal entity, Northwind Restoration Ltd (registration number NW-4471203), following a comprehensive evaluation of its environmental and social governance practices."
+  source_ref: northwind_restoration/press_release.md
+
+# --- G3 ABSENT: genuine none-found cases ---
+
+# Canonical G3 trap: Verdant registry has no directors.
+q19:
+  company: Verdant Capital Ltd
+  question: "List the directors of record for Verdant Capital Ltd as shown in the registry extract."
+  gold_answer: "Not found in the provided sources."
+  gold_label: "Not found in the provided sources."
+  source_ref: verdant_capital_ltd/registry_extract.md
+
+# Second G3: no adverse media for Verdant.
+q20:
+  company: Verdant Capital Ltd
+  question: "What adverse media or regulatory actions were identified for Verdant Capital Ltd?"
+  gold_answer: "Not found in the provided sources."
+  gold_label: "Not found in the provided sources."
+  source_ref: verdant_capital_ltd/adverse_media.md
+
+# --- G4 BINARY: sanctions match yes/no ---
+
+q21:
+  company: Atlas Offset Holdings SA
+  question: "Is there a sanctions match for Atlas Offset Holdings SA? Answer yes or no."
+  gold_answer: "Yes. A controlling shareholder, Dorian Salgrave, appears on the fictional Office of Restricted Entities list."
+  gold_label: "yes"
+  source_ref: atlas_offset_holdings/sanctions_check.md
+
+q22:
+  company: Northwind Restoration Ltd
+  question: "Is there a sanctions match for Northwind Restoration Ltd? Answer yes or no."
+  gold_answer: "No. No matches were found on the consolidated sanctions lists."
+  gold_label: "no"
+  source_ref: northwind_restoration/sanctions_check.md
+
+q23:
+  company: Verdant Capital Ltd
+  question: "Is there a sanctions match for Verdant Capital Ltd? Answer yes or no."
+  gold_answer: "No. No matches were found on any list searched."
+  gold_label: "no"
+  source_ref: verdant_capital_ltd/sanctions_check.md
+
+# --- G5 JUDGE / RELEVANCY: multi-hop and open questions ---
+
+# Multi-hop edge case: combine registry + sanctions for Atlas.
+q24:
+  company: Atlas Offset Holdings SA
+  question: "Combining the registry extract and the sanctions check for Atlas Offset Holdings SA, what is the compliance risk presented by the beneficial ownership structure?"
+  gold_answer: "The registry extract identifies Dorian Salgrave as a controlling shareholder holding 55% of issued shares, domiciled in the fictional jurisdiction of Archovia. The sanctions check confirms that this individual is listed on the fictional Office of Restricted Entities register, creating an indirect exposure flag for the company under the applicable fictional compliance framework. The company itself is not a named entry on any sanctions list, but the ownership nexus represents a material compliance consideration."
+  gold_label: "The registry extract identifies Dorian Salgrave as a controlling shareholder holding 55% of issued shares, domiciled in the fictional jurisdiction of Archovia. The sanctions check confirms that this individual is listed on the fictional Office of Restricted Entities register, creating an indirect exposure flag for the company under the applicable fictional compliance framework. The company itself is not a named entry on any sanctions list, but the ownership nexus represents a material compliance consideration."
+  source_ref: atlas_offset_holdings/sanctions_check.md
