@@ -1,11 +1,6 @@
 from __future__ import annotations
 
 import json
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import run_eval
 
@@ -41,6 +36,32 @@ def test_replay_scores_without_network(tmp_path, monkeypatch):
     assert (out / "eval_report.json").exists()
     assert (out / "confusion.png").exists()
     assert (out / "reliability.png").exists()
+
+
+def test_baseline_refuses_to_clobber_default_results():
+    # A baseline run pointed at the default results/ dir must raise before doing
+    # anything, so it can never overwrite the committed retrieval-on results.
+    import pytest
+    with pytest.raises(ValueError):
+        run_eval.run(mode="live", out_dir="results", baseline=True)
+
+
+def test_model_run_refuses_to_clobber_default_results():
+    import pytest
+    with pytest.raises(ValueError):
+        run_eval.run(mode="live", out_dir="results", model="claude-haiku-4-5-20251001")
+
+
+def test_baseline_allowed_with_separate_out_dir(tmp_path, monkeypatch):
+    # With a separate out-dir the guard passes; we stop before any network call
+    # by making the answer client raise, proving the guard is not the blocker.
+    import answer as answer_mod
+    class BoomClient:
+        def __init__(self, *a, **k): raise RuntimeError("would call network")
+    monkeypatch.setattr(answer_mod, "AnthropicAnswerClient", BoomClient)
+    import pytest
+    with pytest.raises(RuntimeError, match="network"):
+        run_eval.run(mode="live", out_dir=str(tmp_path / "baseline"), baseline=True)
 
 
 def test_replay_empty_field_keys_is_not_a_pass(tmp_path):

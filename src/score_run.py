@@ -7,12 +7,10 @@ from __future__ import annotations
 
 import json
 import re
-import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from metric_record import MetricRecord, record_to_dict  # noqa: E402
+from metric_record import MetricRecord, record_to_dict
 
 SENTINEL = "Not found in the provided sources."
 
@@ -55,7 +53,11 @@ def _score_tolerance(qid, spec, gold, ans) -> MetricRecord:
 
 def _score_absent(qid, spec, gold, ans) -> MetricRecord:
     g = spec["gate_id"]
-    ok = _norm(ans) == _norm(SENTINEL)
+    # Accept the sentinel optionally followed by a source citation
+    # (e.g. "Not found in the provided sources. [source: registry_extract.md]"),
+    # so a faithful, cited refusal is not penalised. A fabricated answer that
+    # does not begin with the sentinel still fails.
+    ok = _norm(ans).startswith(_norm(SENTINEL))
     reason = "rendered the not-found sentinel" if ok else f"{qid} must render the sentinel but rendered {ans!r}"
     return MetricRecord("deterministic", g, 1.0 if ok else 0.0, GATE_THRESHOLDS[g], ok, reason, field_id=qid)
 

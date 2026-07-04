@@ -1,11 +1,6 @@
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
 import pytest
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import judge_calibration as jc
 import calibration_csv_to_jsonl as conv
@@ -50,9 +45,8 @@ def test_agreement_perfect_when_judge_matches_labels():
 
 def test_gate_passes_at_point_nine():
     items = _items()
-    # make the judge score the fail item low so it agrees -> 5/5
-    judge = ScriptedJudge(geval=0.5)  # geval items c1,c2 now fail though...
-    # adjust: only c5 should fail; keep c1,c2 passing
+    # Judge scores the one operator-fail item (c5, "bad") low and everything
+    # else high, so it agrees with all 5 labels -> agreement 1.0, gate passes.
     judge = type("J", (), {
         "run_geval": lambda self, case: {"score": 0.2 if case["actual_output"] == "bad" else 1.0, "reason": "x"},
         "run_faithfulness": lambda self, case: {"score": 1.0, "reason": "x"},

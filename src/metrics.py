@@ -35,7 +35,10 @@ def reliability_bins(points: List[Tuple[float, bool]], n_bins: int = 5) -> List[
         else:
             members = [c for conf, c in points if lo <= conf < hi]
         n = len(members)
-        acc = (sum(1 for c in members if c) / n) if n else 0.0
+        # Empty bins have no empirical accuracy. Marking them None (rather than
+        # 0.0) stops the reliability curve from drawing a false drop-to-zero at
+        # confidences where there is simply no data.
+        acc = (sum(1 for c in members if c) / n) if n else None
         bins.append({"lo": lo, "hi": hi, "n": n, "empirical_accuracy": acc})
     return bins
 
@@ -53,12 +56,21 @@ def plot_confusion(cm: Dict[str, int], out_path: str) -> None:
 
 
 def plot_reliability(bins: List[dict], out_path: str) -> None:
-    xs = [(b["lo"] + b["hi"]) / 2 for b in bins]
-    ys = [b["empirical_accuracy"] for b in bins]
+    # Plot only populated bins; empty bins carry empirical_accuracy=None and are
+    # skipped so the curve never dips to zero where there is no data.
+    populated = [b for b in bins if b["n"] > 0 and b["empirical_accuracy"] is not None]
+    xs = [(b["lo"] + b["hi"]) / 2 for b in populated]
+    ys = [b["empirical_accuracy"] for b in populated]
+    total = sum(b["n"] for b in bins)
     fig, ax = plt.subplots(figsize=(4, 4))
     ax.plot([0, 1], [0, 1], "--", color="grey", label="perfect calibration")
     ax.plot(xs, ys, "o-", color="C0", label="judge")
+    for b, x, y in zip(populated, xs, ys):
+        ax.annotate(f"n={b['n']}", (x, y), textcoords="offset points",
+                    xytext=(4, 4), fontsize=8, color="C0")
     ax.set_xlabel("judge confidence"); ax.set_ylabel("empirical accuracy")
     ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.legend()
     ax.set_title("Judge reliability curve")
+    ax.text(0.5, -0.22, f"{total} verdicts — populated bins only",
+            transform=ax.transAxes, ha="center", fontsize=8, color="grey")
     fig.tight_layout(); fig.savefig(out_path, dpi=120); plt.close(fig)

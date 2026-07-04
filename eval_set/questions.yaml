@@ -144,10 +144,16 @@ q19:
   gold_label: "Not found in the provided sources."
   source_ref: verdant_capital_ltd/registry_extract.md
 
-# Second G3: no adverse media for Verdant.
+# Second G3: genuinely-absent field for Verdant.
+# NOTE (2026-07-04): retargeted from "adverse media" to "beneficial ownership".
+# The adverse-media screen affirmatively states "No adverse media identified"
+# (adverse_media.md:10) — a present negative finding, so the not-found sentinel
+# was the wrong gold there. Beneficial ownership is genuinely absent from every
+# Verdant source (the sanctions report notes BO screening was limited because
+# director info was unavailable), so the sentinel is the correct faithful answer.
 q20:
   company: Verdant Capital Ltd
-  question: "What adverse media or regulatory actions were identified for Verdant Capital Ltd?"
+  question: "Who are the ultimate beneficial owners of Verdant Capital Ltd, per the provided sources?"
   gold_answer: "Not found in the provided sources."
   gold_label: "Not found in the provided sources."
   source_ref: verdant_capital_ltd/adverse_media.md

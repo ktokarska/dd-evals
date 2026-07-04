@@ -1,0 +1,77 @@
+{
+  "agreement": 1.0,
+  "passed_gate": true,
+  "per_item": {
+    "c01": {
+      "judge_label": "pass",
+      "operator_label": "pass",
+      "score": 1.0,
+      "matched": true
+    },
+    "c02": {
+      "judge_label": "pass",
+      "operator_label": "pass",
+      "score": 1.0,
+      "matched": true
+    },
+    "c03": {
+      "judge_label": "pass",
+      "operator_label": "pass",
+      "score": 1.0,
+      "matched": true
+    },
+    "c04": {
+      "judge_label": "pass",
+      "operator_label": "pass",
+      "score": 1.0,
+      "matched": true
+    },
+    "c05": {
+      "judge_label": "pass",
+      "operator_label": "pass",
+      "score": 1.0,
+      "matched": true
+    },
+    "c06": {
+      "judge_label": "fail",
+      "operator_label": "fail",
+      "score": 0.0,
+      "matched": true
+    },
+    "c07": {
+      "judge_label": "fail",
+      "operator_label": "fail",
+      "score": 0.0,
+      "matched": true
+    },
+    "c08": {
+      "judge_label": "fail",
+      "operator_label": "fail",
+      "score": 0.25,
+      "matched": true
+    },
+    "c09": {
+      "judge_label": "fail",
+      "operator_label": "fail",
+      "score": 0.0,
+      "matched": true
+    },
+    "c10": {
+      "judge_label": "fail",
+      "operator_label": "fail",
+      "score": 0.0,
+      "matched": true
+    }
+  },
+  "provenance": {
+    "judge": "Claude Sonnet 5 stand-in applying the pinned rubrics (judge/rubrics.md)",
+    "note": "No Anthropic API key was available; the pinned live judge path (judge_runner.AnthropicJudgeClient) was not used. Scores were produced by a Sonnet-class judge under the same verbatim rubrics and strict system prompt, then agreement was computed by src/judge_calibration.compute_agreement.",
+    "date": "2026-07-04",
+    "thresholds": {
+      "geval": 0.8,
+      "faithfulness": 0.98,
+      "answer_relevancy": 0.8
+    },
+    "gate": 0.85
+  }
+}

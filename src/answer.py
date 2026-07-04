@@ -41,6 +41,7 @@ def build_prompt(question: str, contexts: List[Tuple[str, str]],
 
 
 def answer_question(question: str, contexts: List[Tuple[str, str]],
-                    client: Any, baseline: bool = False) -> str:
+                    client: Any, baseline: bool = False,
+                    model: str = MODEL) -> str:
     system, user = build_prompt(question, contexts, baseline=baseline)
-    return client.complete(model=MODEL, system=system, user=user).strip()
+    return client.complete(model=model, system=system, user=user).strip()

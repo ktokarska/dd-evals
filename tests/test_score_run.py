@@ -1,10 +1,6 @@
 from __future__ import annotations
 
 import json
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import score_run as sr
 
@@ -79,6 +75,26 @@ def test_judge_score_below_threshold_fails_g2():
 
 def test_absent_requires_exact_sentinel():
     rep = sr.score_run(QUESTIONS, FIELD_KEYS, _answers(q4="Jane Doe, director"), FakeJudge(1.0))
+    rec = [r for r in rep["per_field"] if r["id"] == "q4"][0]
+    assert rec["success"] is False and rec["score"] == 0.0
+    assert rep["gates"]["G3"] == "fail"
+
+
+def test_absent_accepts_sentinel_with_citation():
+    # A faithful refusal that appends a source citation must still pass G3.
+    ans = SENTINEL + " [source: verdant_capital_ltd/registry_extract.md]"
+    rep = sr.score_run(QUESTIONS, FIELD_KEYS, _answers(q4=ans), FakeJudge(1.0))
+    rec = [r for r in rep["per_field"] if r["id"] == "q4"][0]
+    assert rec["success"] is True and rec["score"] == 1.0
+    assert rep["gates"]["G3"] == "pass"
+
+
+def test_absent_rejects_fabrication_that_does_not_start_with_sentinel():
+    # A fabricated answer that does not begin with the sentinel must fail G3,
+    # even if it mentions "not found" later in the string.
+    rep = sr.score_run(QUESTIONS, FIELD_KEYS,
+                       _answers(q4="The sole owner is Jane Doe; nothing else not found."),
+                       FakeJudge(1.0))
     rec = [r for r in rep["per_field"] if r["id"] == "q4"][0]
     assert rec["success"] is False and rec["score"] == 0.0
     assert rep["gates"]["G3"] == "fail"

@@ -1,10 +1,6 @@
 from __future__ import annotations
 
 import json
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from metric_record import MetricRecord, record_to_dict, passed
 

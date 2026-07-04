@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=65"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dd-evals"
+version = "0.1.0"
+description = "A due-diligence evaluation harness with a calibrated, meta-evaluated LLM judge."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+    "pyyaml==6.0.3",
+    "matplotlib==3.9.4",
+]
+
+# Live mode (calling the Anthropic API) is optional; replay mode and the whole
+# test suite run with no key and no anthropic install.
+[project.optional-dependencies]
+live = ["anthropic>=0.40,<1.0"]
+dev = ["pytest==9.1.1"]
+
+# src-layout: the modules under src/ install as top-level imports, so no source
+# file needs a sys.path hack. Install editable with:  pip install -e ".[dev]"
+[tool.setuptools]
+package-dir = { "" = "src" }
+py-modules = [
+    "answer",
+    "calibration_csv_to_jsonl",
+    "judge_calibration",
+    "judge_runner",
+    "metric_record",
+    "metrics",
+    "mutation_check",
+    "retrieve",
+    "score_run",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

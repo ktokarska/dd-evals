@@ -1,10 +1,5 @@
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-
 import metrics
 
 
@@ -41,6 +36,18 @@ def test_plots_write_png(tmp_path):
     rpath = tmp_path / "reliability.png"
     metrics.plot_reliability(bins, str(rpath))
     assert rpath.exists() and rpath.stat().st_size > 0
+
+
+def test_empty_bins_are_none_not_zero():
+    # Only high-confidence points: the low/mid bins are empty and must carry
+    # empirical_accuracy=None, not 0.0, so the reliability curve does not draw a
+    # false drop-to-zero where there is no data.
+    points = [(0.9, True), (0.95, True), (0.85, True)]
+    bins = metrics.reliability_bins(points, n_bins=5)
+    empty = [b for b in bins if b["n"] == 0]
+    assert empty, "expected some empty bins for this input"
+    assert all(b["empirical_accuracy"] is None for b in empty)
+    assert all(b["empirical_accuracy"] != 0.0 for b in empty)
 
 
 def test_reliability_bins_no_double_count_on_boundary():

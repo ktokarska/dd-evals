@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install (editable, with dev deps)
+        run: pip install -e ".[dev]"
+      - name: Unit tests
+        run: python -m pytest -q
+
+  replay-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install (editable, with dev deps)
+        run: pip install -e ".[dev]"
+      - name: Replay must reproduce the committed report
+        run: |
+          python run_eval.py --mode replay --out-dir /tmp/ci_replay
+          diff <(python -c "import json;print(json.dumps(json.load(open('/tmp/ci_replay/eval_report.json')),sort_keys=True,indent=2))") \
+               <(python -c "import json;print(json.dumps(json.load(open('results/eval_report.json')),sort_keys=True,indent=2))")
+      - name: Mutation check must reproduce the committed grader self-test
+        run: |
+          cp results/mutation_check.json /tmp/mc_committed.json
+          python src/mutation_check.py
+          diff <(python -c "import json;print(json.dumps(json.load(open('/tmp/mc_committed.json')),sort_keys=True))") \
+               <(python -c "import json;print(json.dumps(json.load(open('results/mutation_check.json')),sort_keys=True))")

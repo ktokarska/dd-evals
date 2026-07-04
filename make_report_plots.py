@@ -19,9 +19,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT / "src"))
 
-import metrics  # noqa: E402
+import metrics
 
 
 def main(results_dir: str = "results") -> None:

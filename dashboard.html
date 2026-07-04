@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dd-evals — evaluation dashboard</title>
+<style>
+  :root{
+    --bg:#fbf9f5; --bg-2:#f4f0e8; --surface:#ffffff; --surface-2:#f0ece3;
+    --line:#e2ddd2; --text:#15212b; --muted:#4c5a64; --faint:#8a9399;
+    --accent:#143655; --accent-2:#1f5680; --accent-soft:rgba(20,54,85,.10);
+    --pass:#2e7d5b; --pass-soft:rgba(46,125,91,.13);
+    --fail:#b3453b; --fail-soft:rgba(179,69,59,.13);
+    --gold:#c8981d; --gold-soft:rgba(200,152,29,.15);
+    --radius:14px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--muted);
+    font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.5}
+  .wrap{max-width:1100px;margin:0 auto;padding:22px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+    color:var(--faint);font-size:13px;margin-bottom:18px}
+  .topbar b{color:var(--text)}
+  .hero{background:linear-gradient(120deg,#0f2a44,#143655 55%,#1f5680);
+    color:#fff;border-radius:20px;padding:28px 32px;margin-bottom:20px;
+    box-shadow:0 18px 42px -24px rgba(20,54,85,.75)}
+  .hero .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:11px;opacity:.72;margin-bottom:10px}
+  .hero h1{margin:0 0 10px;font-size:32px;font-weight:700;letter-spacing:-.01em}
+  .hero h1 .dot{color:#7fb6d9}
+  .hero .goal{opacity:.92;font-size:15px;max-width:none;margin:0 0 18px}
+  .headline{background:rgba(127,182,217,.12);border:1px solid rgba(127,182,217,.32);
+    border-radius:12px;padding:14px 16px}
+  .headline .h{font-size:11px;letter-spacing:.12em;color:#bcd9ec;font-weight:700;margin-bottom:10px;text-transform:uppercase}
+  .headline ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  @media(max-width:720px){.headline ul{grid-template-columns:1fr}}
+  .headline li{display:flex;gap:10px;align-items:baseline;font-size:13px;color:#eaf2f8}
+  .headline li b{color:#fff}
+  .headline .n{background:#7fb6d9;color:#0f2a44;font-weight:700;border-radius:6px;
+    min-width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;flex:0 0 auto}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+  .hbtn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;
+    text-decoration:none;padding:11px 20px;border-radius:999px;transition:transform .15s ease,box-shadow .15s ease}
+  .hbtn.primary{background:#fff;color:var(--accent)}
+  .hbtn.primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(0,0,0,.45)}
+  .hbtn .arw{font-size:15px}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  @media(max-width:680px){.stat-row{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+  .stat .v{font-size:27px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+  .stat .v.warn{color:var(--fail)}
+  .stat .l{color:var(--muted);font-size:12px;margin-top:3px}
+  .grid{display:grid;gap:18px}
+  .g2{grid-template-columns:1fr 1fr}
+  @media(max-width:860px){.g2{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:22px 24px;box-shadow:0 12px 32px -28px rgba(20,54,85,.5);margin-bottom:18px}
+  .card h3{margin:0 0 4px;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--accent-2);font-weight:700}
+  .card .cap{color:var(--faint);font-size:12px;margin:0 0 16px}
+  h2{color:var(--text);font-size:15px;margin:0 0 12px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);font-weight:700;white-space:nowrap}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+  .pill.pass{background:var(--pass-soft);color:var(--pass)}
+  .pill.fail{background:var(--fail-soft);color:var(--fail)}
+  .pill.gold{background:var(--gold-soft);color:#8a6400}
+  .pill.teal{background:var(--accent-soft);color:var(--accent)}
+  .bar{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;min-width:60px}
+  .bar > span{display:block;height:100%;border-radius:999px;background:var(--accent-2)}
+  .bar.f > span{background:var(--fail)}
+  .sources{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:680px){.sources{grid-template-columns:1fr}}
+  .src{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .src .co{font-weight:700;color:var(--text);font-size:13px;margin-bottom:7px}
+  .src .docs{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 9px;font-size:11px;color:var(--muted)}
+  .spot{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:center}
+  @media(max-width:720px){.spot{grid-template-columns:1fr}}
+  .spot .q{color:var(--text);font-weight:600;margin:0 0 10px}
+  .quote{border-left:3px solid var(--gold);background:var(--gold-soft);border-radius:0 10px 10px 0;
+    padding:10px 14px;font-size:13px;color:var(--text);margin:0 0 12px}
+  .strike{text-decoration:line-through;text-decoration-color:var(--fail);color:var(--fail)}
+  .gauge{text-align:center}
+  .gauge .g-val{font-size:40px;font-weight:700;color:var(--fail);font-variant-numeric:tabular-nums;line-height:1}
+  .gauge .g-bar{height:12px;border-radius:999px;background:var(--surface-2);position:relative;margin:14px 0 6px;overflow:hidden}
+  .gauge .g-fill{position:absolute;left:0;top:0;bottom:0;background:var(--fail);border-radius:999px}
+  .gauge .g-thr{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--accent)}
+  .gauge .g-lbl{font-size:11px;color:var(--muted)}
+  .mono{font-family:var(--mono);font-size:12px}
+  .foot{color:var(--faint);font-size:12px;line-height:1.6;margin-top:6px}
+  .foot code{font-family:var(--mono);background:var(--surface-2);padding:1px 5px;border-radius:5px;color:var(--muted)}
+  a{color:var(--accent-2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <span><b>dd-evals</b> · evaluation dashboard</span>
+    <span>Synthetic data · fully reproducible · run 2026-07-04</span>
+  </div>
+
+  <!-- HERO + GOAL (one paragraph) -->
+  <div class="hero">
+    <div class="eyebrow">Due-diligence LLM evaluation</div>
+    <h1>dd&#8209;evals<span class="dot">.</span></h1>
+    <p class="goal">
+      <strong>Goal.</strong> In counterparty due diligence a person signs the output, so
+      &ldquo;looks plausible&rdquo; is not good enough: a confident answer that cites a source it
+      does not support, or that quietly misses a sanctions hit, is worse than no answer at all.
+      dd&#8209;evals is a small, transparent harness that grades an LLM on exactly those failure
+      modes &mdash; grounding, honesty about what is absent, and never being wrong on a high&#8209;stakes
+      yes/no &mdash; behind a judge that must earn trust before its scores count.
+    </p>
+    <div class="hero-actions">
+      <a class="hbtn primary" href="results.html">View results <span class="arw">&rarr;</span></a>
+    </div>
+    <div class="headline">
+      <div class="h">Headline result of this run</div>
+      <ul>
+        <li><span class="n">1</span><span>Caught a <b>fabricated B&nbsp;Corp award</b> the model attributed to a real source</span></li>
+        <li><span class="n">2</span><span>Judge agreed with the human on <b>10/10</b> calibration items</span></li>
+        <li><span class="n">3</span><span><b>Zero</b> false accepts and zero false rejects across 25 fields</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- STAT TILES -->
+  <div class="stat-row">
+    <div class="stat"><div class="v">25</div><div class="l">fields evaluated · 4 companies</div></div>
+    <div class="stat"><div class="v">24 / 25</div><div class="l">answers correct (96%)</div></div>
+    <div class="stat"><div class="v warn">1</div><div class="l">fabrication caught &amp; failed</div></div>
+    <div class="stat"><div class="v">100%</div><div class="l">judge–human agreement (10/10)</div></div>
+  </div>
+
+  <div class="grid g2">
+    <!-- INPUTS / DATA SOURCES -->
+    <div class="card">
+      <h3>Inputs &amp; data sources</h3>
+      <p class="cap">A frozen, entirely fictional 16-document corpus — 4 companies × 4 document types. Every file is stamped &ldquo;fictional entity, for testing only,&rdquo; which is what makes the planted honesty traps possible.</p>
+      <div class="sources">
+        <div class="src"><div class="co">Northwind Restoration Ltd</div><div class="docs"><span class="chip">Registry</span><span class="chip">Sanctions</span><span class="chip">Adverse media</span><span class="chip">Press release</span></div></div>
+        <div class="src"><div class="co">Atlas Offset Holdings SA</div><div class="docs"><span class="chip">Registry</span><span class="chip">Sanctions</span><span class="chip">Adverse media</span><span class="chip">Press release</span></div></div>
+        <div class="src"><div class="co">Meridian Carbon Partners LLP</div><div class="docs"><span class="chip">Registry</span><span class="chip">Sanctions</span><span class="chip">Adverse media</span><span class="chip">Press release</span></div></div>
+        <div class="src"><div class="co">Verdant Capital Ltd</div><div class="docs"><span class="chip">Registry</span><span class="chip">Sanctions</span><span class="chip">Adverse media</span><span class="chip">Press release</span></div></div>
+      </div>
+      <p class="cap" style="margin-top:14px">The system under test retrieves the relevant documents per question, then must answer <em>only</em> from the cited sources.</p>
+    </div>
+
+    <!-- GATE RESULTS -->
+    <div class="card">
+      <h3>Results by gate</h3>
+      <p class="cap">Each field is scored by one of five gates with a stakes-tiered pass bar. One gate failing fails the whole run.</p>
+      <table>
+        <thead><tr><th>Gate</th><th>What it checks</th><th class="num">Pass</th><th>Rate</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td><b>G1</b></td><td>Deterministic field accuracy</td><td class="num">11/11</td><td><div class="bar"><span style="width:100%"></span></div></td><td><span class="pill pass">pass</span></td></tr>
+          <tr><td><b>G2</b></td><td>Faithfulness to cited source</td><td class="num">6/7</td><td><div class="bar f"><span style="width:86%"></span></div></td><td><span class="pill fail">fail</span></td></tr>
+          <tr><td><b>G3</b></td><td>Honesty about absent fields</td><td class="num">2/2</td><td><div class="bar"><span style="width:100%"></span></div></td><td><span class="pill pass">pass</span></td></tr>
+          <tr><td><b>G4</b></td><td>High-stakes yes/no (sanctions)</td><td class="num">3/3</td><td><div class="bar"><span style="width:100%"></span></div></td><td><span class="pill pass">pass</span></td></tr>
+          <tr><td><b>G5</b></td><td>Answer relevancy</td><td class="num">2/2</td><td><div class="bar"><span style="width:100%"></span></div></td><td><span class="pill pass">pass</span></td></tr>
+        </tbody>
+      </table>
+      <p class="cap" style="margin-top:14px">Overall verdict: <span class="pill fail">fail</span> &mdash; and that is the point. One faithful-looking fabrication is exactly the error that ends a candidacy when a person signs the file.</p>
+    </div>
+  </div>
+
+  <!-- WORKED EXAMPLE -->
+  <div class="card">
+    <h3>Worked example — the fabrication the judge caught</h3>
+    <p class="cap">Field q13 · Northwind Restoration Ltd · faithfulness gate (G2) · source: <span class="mono">northwind_restoration/press_release.md</span></p>
+    <div class="spot">
+      <div>
+        <p class="q">Q: What certification does Northwind claim in its press release, and what body awarded it?</p>
+        <div class="quote">
+          The model answered with a B&nbsp;Corp certification — but added an
+          <span class="strike">award year of 2019</span> and an
+          <span class="strike">overall verified score</span> that appear <b>nowhere</b> in the cited press release.
+        </div>
+        <p style="margin:0;color:var(--muted)">The faithfulness judge decomposed the answer into 4 atomic claims, found <b>2 unsupported</b>, and scored it <b>0.50</b> against a <b>0.98</b> bar — failing G2 and the overall run. No human had to notice; the harness did.</p>
+      </div>
+      <div class="gauge">
+        <div class="g-val">0.50</div>
+        <div class="g-lbl">faithfulness score</div>
+        <div class="g-bar">
+          <div class="g-fill" style="width:50%"></div>
+          <div class="g-thr" style="left:98%"></div>
+        </div>
+        <div class="g-lbl">pass bar <b style="color:var(--accent)">0.98</b> &nbsp;→&nbsp; <span class="pill fail">below bar</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVALUATION OF THE EVALUATOR + PROVENANCE -->
+  <div class="grid g2">
+    <div class="card">
+      <h3>Is the evaluation itself trustworthy?</h3>
+      <table>
+        <tbody>
+          <tr><td>Judge vs. human agreement</td><td class="num"><span class="pill teal">10 / 10 = 1.00</span></td></tr>
+          <tr><td>Calibration gate (≥ 0.85)</td><td class="num"><span class="pill pass">passed</span></td></tr>
+          <tr><td>Grader self-test (seeded mutations caught)</td><td class="num"><span class="pill pass">3 / 3</span></td></tr>
+          <tr><td>Confusion vs. ground truth (false accepts / rejects)</td><td class="num"><span class="pill pass">0 / 0</span></td></tr>
+          <tr><td>Replay reproducibility (no API key)</td><td class="num"><span class="pill pass">byte-identical</span></td></tr>
+        </tbody>
+      </table>
+      <p class="cap" style="margin-top:14px">The judge is pinned and calibrated against independent human labels before its scores count; a mutation check proves the scorer flips the right gate when a known-bad answer is injected.</p>
+    </div>
+    <div class="card">
+      <h3>How to reproduce</h3>
+      <p class="foot">
+        Every committed artifact has a committed command that regenerates it, listed in <code>results/RUN_PROVENANCE.md</code>.
+      </p>
+      <p class="foot" style="margin-top:12px">
+        <code>pip install -e ".[dev]"</code><br>
+        <code>python run_eval.py --mode replay --out-dir results</code><br>
+        <code>python make_report_plots.py results</code><br>
+        <code>python src/mutation_check.py</code><br>
+        <code>python -m pytest -q</code>
+      </p>
+      <p class="cap" style="margin-top:14px">Synthetic data only. Not a production KYC product. Calibration for this run used a Sonnet-class stand-in judge under the pinned rubrics (no API key required).</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -41,7 +41,6 @@ def _load_jsonl(path: str) -> List[Dict[str, Any]]:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
     from judge_runner import AnthropicJudgeClient
     import judge_runner as jr
 

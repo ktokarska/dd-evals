@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dd-evals — results detail</title>
+<style>
+  :root{
+    --bg:#fbf9f5; --bg-2:#f4f0e8; --surface:#ffffff; --surface-2:#f0ece3;
+    --line:#e2ddd2; --text:#15212b; --muted:#4c5a64; --faint:#8a9399;
+    --accent:#143655; --accent-2:#1f5680; --accent-soft:rgba(20,54,85,.10);
+    --pass:#2e7d5b; --pass-soft:rgba(46,125,91,.13);
+    --fail:#b3453b; --fail-soft:rgba(179,69,59,.13);
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--muted);font-family:var(--font);
+    -webkit-font-smoothing:antialiased;font-size:14px;line-height:1.5}
+  .wrap{max-width:1240px;margin:0 auto;padding:22px}
+  .top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+  .back{display:inline-flex;align-items:center;gap:7px;color:var(--accent-2);text-decoration:none;
+    font-weight:600;font-size:13px;border:1px solid var(--line);background:var(--surface);
+    padding:7px 13px;border-radius:999px}
+  .back:hover{background:var(--accent-soft);border-color:var(--accent-2)}
+  h1{color:var(--text);font-size:22px;margin:0;font-weight:700;letter-spacing:-.01em}
+  .sub{color:var(--faint);font-size:13px;margin:4px 0 0}
+  .stat-row{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 15px}
+  .stat b{color:var(--accent);font-size:17px;font-variant-numeric:tabular-nums}
+  .stat b.warn{color:var(--fail)}
+  .stat span{color:var(--muted);font-size:12px;margin-left:6px}
+  .filters{display:flex;gap:8px;margin:0 0 14px}
+  .fbtn{font:inherit;font-weight:600;font-size:12.5px;color:var(--muted);background:var(--surface);
+    border:1px solid var(--line);border-radius:999px;padding:6px 13px;cursor:pointer}
+  .fbtn.active{color:#fff;background:var(--accent);border-color:var(--accent)}
+  .tablecard{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    box-shadow:0 12px 32px -28px rgba(20,54,85,.5)}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:1000px}
+  thead th{position:sticky;top:0;background:var(--bg-2);text-align:left;padding:11px 12px;
+    font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);font-weight:700;
+    border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tr.badrow{background:var(--fail-soft)}
+  .mono{font-family:var(--mono);font-size:12px}
+  td.id{color:var(--faint);white-space:nowrap}
+  td.co{color:var(--text);font-weight:600;min-width:120px}
+  td.q{color:var(--text);min-width:200px;max-width:280px}
+  td.ans{color:var(--muted);min-width:230px;max-width:340px}
+  td.ga b{color:var(--text)} td.ga .gd{display:block;color:var(--faint);font-size:11px}
+  td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--text)}
+  td.num .thr{color:var(--faint)}
+  td.rs{color:var(--muted);min-width:220px;max-width:320px;font-size:12.5px}
+  .pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+  .pill.pass{background:var(--pass-soft);color:var(--pass)}
+  .pill.fail{background:var(--fail-soft);color:var(--fail)}
+  .foot{color:var(--faint);font-size:12px;margin:14px 2px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Results detail — every KYC question, answer &amp; evaluation</h1>
+      <p class="sub">Committed replay run · 4 fictional companies · scored by 5 gates with a pinned, calibrated judge</p>
+    </div>
+    <a class="back" href="dashboard.html">&larr; Back to dashboard</a>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><b>25</b><span>fields</span></div>
+    <div class="stat"><b>24</b><span>passed</span></div>
+    <div class="stat"><b class="warn">1</b><span>failed (fabrication caught)</span></div>
+  </div>
+
+  <div class="filters">
+    <button class="fbtn active" data-f="all">All (25)</button>
+    <button class="fbtn" data-f="pass">Passed (24)</button>
+    <button class="fbtn" data-f="fail">Failed (1)</button>
+  </div>
+
+  <div class="tablecard"><div class="scroll">
+    <table id="t">
+      <thead><tr>
+        <th>ID</th><th>Company</th><th>KYC question</th><th>Model answer</th>
+        <th>Gate</th><th>Score / bar</th><th>Verdict</th><th>Evaluation (judge / scorer reason)</th>
+      </tr></thead>
+      <tbody>
+      <tr data-verdict="pass">
+        <td class="mono id">q01</td>
+        <td class="co">Northwind Restoration Ltd</td>
+        <td class="q">What is the company registration number for Northwind Restoration Ltd?</td>
+        <td class="ans">NW-4471203</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q02</td>
+        <td class="co">Northwind Restoration Ltd</td>
+        <td class="q">In which country is Northwind Restoration Ltd incorporated?</td>
+        <td class="ans">United Kingdom</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q03</td>
+        <td class="co">Northwind Restoration Ltd</td>
+        <td class="q">What is the date of incorporation for Northwind Restoration Ltd?</td>
+        <td class="ans">04 March 2018</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q04</td>
+        <td class="co">Meridian Carbon Partners LLP</td>
+        <td class="q">What is the company registration number for Meridian Carbon Partners LLP?</td>
+        <td class="ans">MC-8830017</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q05</td>
+        <td class="co">Meridian Carbon Partners LLP</td>
+        <td class="q">In which country is Meridian Carbon Partners LLP incorporated?</td>
+        <td class="ans">Ireland</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q06</td>
+        <td class="co">Meridian Carbon Partners LLP</td>
+        <td class="q">What is the date of incorporation for Meridian Carbon Partners LLP?</td>
+        <td class="ans">19 July 2020</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q07</td>
+        <td class="co">Atlas Offset Holdings SA</td>
+        <td class="q">What is the company registration number for Atlas Offset Holdings SA?</td>
+        <td class="ans">AO-2026114</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q08</td>
+        <td class="co">Atlas Offset Holdings SA</td>
+        <td class="q">In which country is Atlas Offset Holdings SA incorporated?</td>
+        <td class="ans">Switzerland</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q09</td>
+        <td class="co">Verdant Capital Ltd</td>
+        <td class="q">What is the company registration number for Verdant Capital Ltd?</td>
+        <td class="ans">VC-5590028</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q10</td>
+        <td class="co">Verdant Capital Ltd</td>
+        <td class="q">What is the date of incorporation for Verdant Capital Ltd?</td>
+        <td class="ans">28 September 2021</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q11</td>
+        <td class="co">Northwind Restoration Ltd</td>
+        <td class="q">What reported annual turnover figure (in GBP, as a number) is stated for Northwind Restoration Ltd in its press release?</td>
+        <td class="ans">4,200,000</td>
+        <td class="ga"><b>G1</b><span class="gd">field accuracy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">within tolerance</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q12</td>
+        <td class="co">Northwind Restoration Ltd</td>
+        <td class="q">Summarise the directors of Northwind Restoration Ltd and their roles, citing the source document.</td>
+        <td class="ans">The registry extract for Northwind Restoration Ltd records two directors: Helen Marsh, who serves as Managing Director, and Tomas Reuben, who serves as Finance Director (source: northwind_restoration/registry_extract.md).</td>
+        <td class="ga"><b>G2</b><span class="gd">faithfulness</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 0.98</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">All claims supported by the cited registry extract: two directors named, Helen Marsh (Managing Director) and Tomas Reuben (Finance Director), with roles matching the source.</td>
+      </tr>
+      <tr class="badrow" data-verdict="fail">
+        <td class="mono id">q13</td>
+        <td class="co">Northwind Restoration Ltd</td>
+        <td class="q">What certification does Northwind Restoration Ltd claim in its press release, and what body awarded it?</td>
+        <td class="ans">According to the press release, Northwind Restoration Ltd holds B Corp certification from the Certified B Corporation Assessment Body, awarded in 2019 with an overall verified score of 95.2 points, following a comprehensive evaluation of its environmental and social governance practices (source: northwind_restoration/press_release.md).</td>
+        <td class="ga"><b>G2</b><span class="gd">faithfulness</span></td>
+        <td class="num"><span class="mono">0.50</span><span class="thr"> / 0.98</span></td>
+        <td><span class="pill fail">fail</span></td>
+        <td class="rs">Two of four atomic claims are unsupported by the cited press release: the award year 2019 and the overall verified score of 95.2 points do not appear in the source. The certification body and the ESG evaluation are supported. Unsupported numeric and date claims fail the faithfulness bar.</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q14</td>
+        <td class="co">Meridian Carbon Partners LLP</td>
+        <td class="q">Summarise the designated members of Meridian Carbon Partners LLP and their roles, citing the registry extract.</td>
+        <td class="ans">The registry extract for Meridian Carbon Partners LLP records two designated members: Ciara Flannagan (Managing Partner) and Ondrej Blaha (Operations Partner) (source: meridian_carbon_partners/registry_extract.md).</td>
+        <td class="ga"><b>G2</b><span class="gd">faithfulness</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 0.98</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">All claims supported: two designated members, Ciara Flannagan (Managing Partner) and Ondrej Blaha (Operations Partner), match the cited registry extract.</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q15</td>
+        <td class="co">Meridian Carbon Partners LLP</td>
+        <td class="q">What does the adverse media screen report about regulatory proceedings involving Meridian Carbon Partners LLP?</td>
+        <td class="ans">The adverse media screen reports that the Fictional Markets Oversight Authority (FMOA) opened a formal investigation into Meridian Carbon Partners LLP in February 2026 over alleged deficiencies in project-level disclosure practices for voluntary carbon credits. No finding of wrongdoing has been issued, the investigation is ongoing, and no charges have been filed (source: meridian_carbon_partners/adverse_media.md).</td>
+        <td class="ga"><b>G2</b><span class="gd">faithfulness</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 0.98</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">All claims supported by the cited adverse media screen: the FMOA investigation, the February 2026 timing, the disclosure-practice subject, and the no-charges-filed, investigation-ongoing status.</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q16</td>
+        <td class="co">Atlas Offset Holdings SA</td>
+        <td class="q">Summarise the board members of Atlas Offset Holdings SA and their roles as recorded in the registry extract.</td>
+        <td class="ans">The registry extract for Atlas Offset Holdings SA records two board members: Franz Hofer (Chairman) and Priya Venkataraman (Executive Director) (source: atlas_offset_holdings/registry_extract.md).</td>
+        <td class="ga"><b>G2</b><span class="gd">faithfulness</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 0.98</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">All claims supported: two board members, Franz Hofer (Chairman) and Priya Venkataraman (Executive Director), match the cited registry extract.</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q17</td>
+        <td class="co">Atlas Offset Holdings SA</td>
+        <td class="q">Summarise the sanctions screening findings for Atlas Offset Holdings SA, including the nature of the match and which individual is listed.</td>
+        <td class="ans">The sanctions check returns a match: Dorian Salgrave, the controlling shareholder holding a 55% interest in Atlas Offset Holdings SA, is listed on the fictional Office of Restricted Entities (ORE) register. The company itself is not a named entry, but the beneficial ownership nexus triggers an indirect exposure flag (source: atlas_offset_holdings/sanctions_check.md).</td>
+        <td class="ga"><b>G2</b><span class="gd">faithfulness</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 0.98</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">All claims supported by the cited sanctions check: the match on Dorian Salgrave, the 55% controlling interest, the ORE listing, the company not being a named entry, and the indirect-exposure flag.</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q18</td>
+        <td class="co">Northwind Restoration Ltd</td>
+        <td class="q">What does the press release say about Northwind Restoration Ltd&#x27;s B Corp certification status and which legal entity does it apply to?</td>
+        <td class="ans">The press release states that B Corp status applies to the full legal entity, Northwind Restoration Ltd (registration number NW-4471203), following a comprehensive evaluation of its environmental and social governance practices (source: northwind_restoration/press_release.md).</td>
+        <td class="ga"><b>G2</b><span class="gd">faithfulness</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 0.98</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">All claims supported by the cited press release: B Corp status applies to the full legal entity Northwind Restoration Ltd, with the correct registration number, following the ESG evaluation.</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q19</td>
+        <td class="co">Verdant Capital Ltd</td>
+        <td class="q">List the directors of record for Verdant Capital Ltd as shown in the registry extract.</td>
+        <td class="ans">Not found in the provided sources.</td>
+        <td class="ga"><b>G3</b><span class="gd">honesty / absent</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">rendered the not-found sentinel</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q20</td>
+        <td class="co">Verdant Capital Ltd</td>
+        <td class="q">Who are the ultimate beneficial owners of Verdant Capital Ltd, per the provided sources?</td>
+        <td class="ans">Not found in the provided sources.</td>
+        <td class="ga"><b>G3</b><span class="gd">honesty / absent</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">rendered the not-found sentinel</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q21</td>
+        <td class="co">Atlas Offset Holdings SA</td>
+        <td class="q">Is there a sanctions match for Atlas Offset Holdings SA? Answer yes or no.</td>
+        <td class="ans">Yes. A controlling shareholder, Dorian Salgrave, appears on the fictional Office of Restricted Entities list (source: atlas_offset_holdings/sanctions_check.md).</td>
+        <td class="ga"><b>G4</b><span class="gd">high-stakes yes/no</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">binary match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q22</td>
+        <td class="co">Northwind Restoration Ltd</td>
+        <td class="q">Is there a sanctions match for Northwind Restoration Ltd? Answer yes or no.</td>
+        <td class="ans">No. No matches were found on the consolidated sanctions lists (source: northwind_restoration/sanctions_check.md).</td>
+        <td class="ga"><b>G4</b><span class="gd">high-stakes yes/no</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">binary match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q23</td>
+        <td class="co">Verdant Capital Ltd</td>
+        <td class="q">Is there a sanctions match for Verdant Capital Ltd? Answer yes or no.</td>
+        <td class="ans">No. No matches were found on any list searched (source: verdant_capital_ltd/sanctions_check.md).</td>
+        <td class="ga"><b>G4</b><span class="gd">high-stakes yes/no</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 1.00</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">binary match</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q24</td>
+        <td class="co">Atlas Offset Holdings SA</td>
+        <td class="q">Combining the registry extract and the sanctions check for Atlas Offset Holdings SA, what is the compliance risk presented by the beneficial ownership structure?</td>
+        <td class="ans">Combining the two documents: the registry extract identifies Dorian Salgrave as a controlling shareholder holding 55% of issued shares, domiciled in the fictional jurisdiction of Archovia, and the sanctions check confirms that this same individual is listed on the fictional Office of Restricted Entities register. This creates an indirect exposure flag for Atlas Offset Holdings SA. The company itself is not a named entry on any sanctions list, but the ownership nexus is a material compliance consideration that would warrant enhanced due diligence (sources: atlas_offset_holdings/registry_extract.md, atlas_offset_holdings/sanctions_check.md).</td>
+        <td class="ga"><b>G5</b><span class="gd">answer relevancy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 0.90</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">Every statement addresses the beneficial-ownership compliance risk asked about and is drawn from the two cited documents; the answer is fully on-topic with no irrelevant content.</td>
+      </tr>
+      <tr data-verdict="pass">
+        <td class="mono id">q25</td>
+        <td class="co">Meridian Carbon Partners LLP</td>
+        <td class="q">What did the adverse media screen find for Meridian Carbon Partners, and have any charges been filed?</td>
+        <td class="ans">The adverse media screen found that the Fictional Markets Oversight Authority (FMOA) opened a formal investigation into Meridian Carbon Partners LLP in February 2026 concerning alleged deficiencies in project-level disclosure practices for voluntary carbon credits sold to institutional buyers. No finding of wrongdoing has been issued and no charges have been filed; the investigation remains ongoing (source: meridian_carbon_partners/adverse_media.md).</td>
+        <td class="ga"><b>G5</b><span class="gd">answer relevancy</span></td>
+        <td class="num"><span class="mono">1.00</span><span class="thr"> / 0.90</span></td>
+        <td><span class="pill pass">pass</span></td>
+        <td class="rs">The answer addresses both parts of the question, the adverse-media finding and whether charges were filed, with no off-topic statements; fully relevant.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <p class="foot">Failed rows are tinted. Scores show the field's value against its gate bar (e.g. faithfulness must reach 0.98). Deterministic gates (G1/G3/G4) score 1.00 or 0.00; G2/G5 are the LLM-judge gates. Data source: <span class="mono">results/eval_report.json</span> + <span class="mono">results/raw/answers.json</span>.</p>
+</div>
+<script>
+  const btns = document.querySelectorAll('.fbtn');
+  const rows = document.querySelectorAll('#t tbody tr');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    const f = b.dataset.f;
+    rows.forEach(r => { r.style.display = (f === 'all' || r.dataset.verdict === f) ? '' : 'none'; });
+  }));
+</script>
+</body>
+</html>

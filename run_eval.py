@@ -8,20 +8,18 @@ plots into out_dir.
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT / "src"))
 
-import yaml  # noqa: E402
+import yaml
 
-import retrieve  # noqa: E402
-import answer as answer_mod  # noqa: E402
-import judge_runner as jr  # noqa: E402
-from score_run import score_run  # noqa: E402
-import metrics  # noqa: E402
+import retrieve
+import answer as answer_mod
+import judge_runner as jr
+from score_run import score_run
+import metrics
 
 EVAL_SET = ROOT / "eval_set"
 CORPUS_DIR = ROOT / "corpus"
@@ -78,9 +76,17 @@ def _emit_plots(report, verdicts, out_dir):
 
 
 def run(mode: str, out_dir: str, raw_dir: Optional[str] = None,
-        questions: Optional[dict] = None, field_keys: Optional[dict] = None) -> Dict[str, Any]:
+        questions: Optional[dict] = None, field_keys: Optional[dict] = None,
+        baseline: bool = False, model: Optional[str] = None) -> Dict[str, Any]:
     if questions is None or field_keys is None:
         questions, field_keys = _load_eval_set()
+
+    # Closed-book (baseline) and cross-model runs must not overwrite the committed
+    # retrieval-on results in results/; force them to a separate out-dir.
+    if (baseline or model) and Path(out_dir).resolve() == (ROOT / "results").resolve():
+        raise ValueError(
+            "baseline/--model runs must use a separate --out-dir "
+            "(e.g. results/baseline or results/models/<id>), not results/")
 
     if mode == "replay":
         raw = Path(raw_dir or (ROOT / "results" / "raw"))
@@ -108,7 +114,9 @@ def run(mode: str, out_dir: str, raw_dir: Optional[str] = None,
             company = q["source_ref"].split("/")[0]
             hits = retrieve.retrieve(q["question"], corpus, company=company, k=3)
             contexts[qid] = "\n\n".join(f"[source: {p}]\n{t}" for p, t in hits)
-            answers[qid] = answer_mod.answer_question(q["question"], hits, client=ans_client)
+            answers[qid] = answer_mod.answer_question(
+                q["question"], hits, client=ans_client,
+                baseline=baseline, model=model or answer_mod.MODEL)
         report = score_run(questions, field_keys, answers, LiveJudge(),
                            contexts=contexts, out_dir=out_dir)
         # record raw for reproducibility and so replay mode can re-run
@@ -129,6 +137,10 @@ if __name__ == "__main__":  # pragma: no cover
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["replay", "live"], default="replay")
     ap.add_argument("--out-dir", default="results")
+    ap.add_argument("--baseline", action="store_true",
+                    help="closed-book: withhold retrieval context to measure its lift")
+    ap.add_argument("--model", default=None,
+                    help="answering model id (judge stays pinned); requires a separate --out-dir")
     a = ap.parse_args()
-    rep = run(mode=a.mode, out_dir=a.out_dir)
+    rep = run(mode=a.mode, out_dir=a.out_dir, baseline=a.baseline, model=a.model)
     print(json.dumps({"overall": rep["overall"], "gates": rep["gates"]}, indent=2))

@@ -39,7 +39,9 @@ The judge is hand-rolled, with the only network call being to the model. It is:
 - **Three rubrics, named in the standard vocabulary:** G-Eval (prose quality), Faithfulness (citation support by claim decomposition: extract atomic claims, check each against the cited context, any contradiction forces a zero), and Answer Relevancy.
 - **Given a way out:** the judge may return "unsupported" rather than guess, which suppresses judge hallucination.
 
-**The judge has to be calibrated before its scores count toward a release decision.** `judge_calibration.py` runs the judge against a 10-item, operator-labelled set and requires at least 85% agreement with the human. The set carries two honesty traps (a falsely asserted sanctions hit, and an invented value for an absent field). The calibration set ships as a scaffold with candidate answers written and the operator label left blank, plus a runbook (`judge/CALIBRATION_GUIDE.md`) whose one rule is: lock your labels before you run the judge, and never relabel an item to raise agreement. The judge-versus-human result is not committed here, because it is the operator's own judgment to produce; the harness ships the machinery and the runbook.
+**The judge has to be calibrated before its scores count toward a release decision.** `judge_calibration.py` runs the judge against a 10-item, operator-labelled set and requires at least 85% agreement with the human. The set carries two honesty traps (a falsely asserted sanctions hit, and an invented value for an absent field). The calibration set ships with candidate answers written and the operator label filled independently, following the runbook (`judge/CALIBRATION_GUIDE.md`) whose one rule is: lock your labels before you run the judge, and never relabel an item to raise agreement.
+
+**Measured agreement: 10/10 = 1.00 (gate ≥ 0.85), measured 2026-07-04** — committed in `judge/calibration_result.json`. The judge agreed with the operator on every item, including both honesty traps and the wrong-title near-miss (c08). This calibration was produced by a Sonnet-class stand-in judge applying the verbatim rubrics, because no API key was available for the pinned live path; the agreement is computed by `judge_calibration.compute_agreement` and is reproducible from the committed labels. Note the small N (10): the number certifies the rubric-to-human fit on this set, not a population estimate.
 
 ## Results
 
@@ -66,17 +68,17 @@ Across all 25 fields the harness agreed with ground truth: 24 sound answers acce
 
 ![Judge reliability](results/reliability.png)
 
-The committed reliability curve shows the judge's confidence on this run against whether it agreed with ground truth. A rigorous calibration of the judge against independent human labels, the version that gates a release decision, is the operator step described above and in `judge/CALIBRATION_GUIDE.md`.
+The committed reliability curve shows the judge's confidence across the 9 judged verdicts on this run against whether it agreed with ground truth. Only populated confidence bins are plotted (each annotated with its count); empty bins are omitted rather than drawn as zero accuracy, so the curve does not imply miscalibration where there is simply no data. The separate judge-vs-human calibration that gates a release decision is reported above (10/10 agreement, `judge/calibration_result.json`).
 
-## The seven evaluation headings
+## Evaluation dimensions
 
-The same headings carry across the portfolio so the method reads as one approach:
+The harness is organized around seven standard evaluation dimensions:
 
 1. **Edge cases.** A genuine none-found (absent directors), a near-miss where the fact sits in the press release and not the registry, and a multi-hop question that combines the registry and the sanctions check.
 2. **Failure modes.** See the taxonomy below.
 3. **Scoring criteria.** The gate catalog and the three judge rubrics (`judge/rubrics.md`).
 4. **Confusion matrix.** Above, harness verdict against ground truth.
-5. **Calibration reliability curve.** Above, with the rigorous human calibration deferred to the operator step.
+5. **Calibration reliability curve.** Above. The judge is separately calibrated against independent human labels (10/10 agreement, `judge/calibration_result.json`).
 6. **Baseline comparison.** The answer client supports a closed-book (no-retrieval) mode, so the lift from retrieval can be measured directly.
 7. **Reproducibility.** A frozen corpus, a pinned judge, and one command to regenerate the committed results with no key.
 
@@ -103,18 +105,20 @@ The committed `results/mutation_check.json` shows all three caught. The scorer d
 ## Reproduce it
 
 ```bash
-pip install -r requirements.txt
+pip install -e ".[dev]"          # editable install; no source file needs a path hack
 
 # Regenerate the committed report and plots with no API key.
 python run_eval.py --mode replay --out-dir results
-python make_report_plots.py            # confusion + reliability from ground-truth labels
+python make_report_plots.py results    # confusion + reliability from ground-truth labels
+python src/mutation_check.py           # regenerate the grader self-test
 
-# Re-run against the live model (needs a key).
+# Re-run against the live model (needs a key and the live extra).
+pip install -e ".[live]"
 export ANTHROPIC_API_KEY=...
 python run_eval.py --mode live --out-dir results
 ```
 
-Replay mode scores the committed answers and judge verdicts in `results/raw/` with no network call, so the results regenerate identically anywhere. Live mode runs the full retrieve, answer, judge pipeline against the API and records its own raw outputs.
+Replay mode scores the committed answers and judge verdicts in `results/raw/` with no network call, so the results regenerate identically anywhere. Live mode runs the full retrieve, answer, judge pipeline against the API and records its own raw outputs. Every committed artifact and the exact command that regenerates it are listed in `results/RUN_PROVENANCE.md`.
 
 The test suite is fast and offline:
 

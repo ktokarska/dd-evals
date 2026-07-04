@@ -1,10 +1,5 @@
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-
 import answer
 
 
@@ -38,3 +33,30 @@ def test_answer_question_returns_text():
 def test_prompt_instructs_sentinel_for_absent():
     sysmsg, user = answer.build_prompt("directors?", [("registry.md", "no directors listed")])
     assert "Not found in the provided sources." in sysmsg
+
+
+class ModelCapturingClient:
+    def __init__(self, reply="ok"):
+        self.reply = reply
+        self.calls = []
+    def complete(self, *, model, system, user):
+        self.calls.append({"model": model, "system": system, "user": user})
+        return self.reply
+
+
+def test_answer_question_defaults_to_pinned_model():
+    c = ModelCapturingClient()
+    answer.answer_question("q?", [("s.md", "ctx")], client=c)
+    assert c.calls[0]["model"] == answer.MODEL
+
+
+def test_answer_question_threads_model_override():
+    c = ModelCapturingClient()
+    answer.answer_question("q?", [("s.md", "ctx")], client=c, model="claude-haiku-4-5-20251001")
+    assert c.calls[0]["model"] == "claude-haiku-4-5-20251001"
+
+
+def test_answer_question_baseline_withholds_context_from_client():
+    c = ModelCapturingClient()
+    answer.answer_question("q?", [("s.md", "SECRET-CTX")], client=c, baseline=True)
+    assert "SECRET-CTX" not in c.calls[0]["user"]
