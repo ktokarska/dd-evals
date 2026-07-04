@@ -1,6 +1,10 @@
 # dd-evals
 
+[![CI](https://github.com/ktokarska/dd-evals/actions/workflows/ci.yml/badge.svg)](https://github.com/ktokarska/dd-evals/actions/workflows/ci.yml)
+
 **An evaluation harness that scores whether an LLM's due-diligence answers are grounded in their cited sources, honest about what is absent, and never wrong on a high-stakes yes/no.**
+
+**[▶ Live dashboard](https://kasiatokarska.com/dd-evals/dashboard.html)** · synthetic data, fully reproducible.
 
 In counterparty due diligence a person signs the output. "Looks plausible" is not good enough: a confident answer that cites a source it does not actually support, or that quietly misses a sanctions hit, is worse than no answer at all. `dd-evals` is a small, transparent harness that grades an LLM on exactly those failure modes, on a high-stakes domain, with a judge that has to earn trust before its scores count.
 
