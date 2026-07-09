@@ -79,8 +79,8 @@ def main() -> None:
 
     The clean answer set is the gold answer for every field (so the baseline
     passes); the reference judge above stands in for the LLM judge. This is a
-    grader self-test — it proves the scorer flips the right gate when a known-bad
-    answer is injected — and is fully deterministic, so the committed JSON is
+    grader self-test, it proves the scorer flips the right gate when a known-bad
+    answer is injected, and is fully deterministic, so the committed JSON is
     reproducible with no API key.
     """
     import json
@@ -94,7 +94,7 @@ def main() -> None:
     result = run_mutation_check(questions, field_keys, clean, _ReferenceJudge())
     out = root / "results" / "mutation_check.json"
     out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    print(f"wrote {out} — all_caught={result['all_caught']}, baseline={result['baseline_overall']}")
+    print(f"wrote {out}, all_caught={result['all_caught']}, baseline={result['baseline_overall']}")
 
 
 if __name__ == "__main__":  # pragma: no cover

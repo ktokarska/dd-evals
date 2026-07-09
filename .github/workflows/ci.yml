@@ -6,6 +6,13 @@ on:
   pull_request:
 
 jobs:
+  style-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No em dashes allowed
+        run: bash scripts/no-em-dash.sh
+
   test:
     runs-on: ubuntu-latest
     steps:

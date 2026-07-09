@@ -18,7 +18,7 @@ API key; the raw model/judge outputs are the recorded inputs the rest derive fro
 - `mode` is `replay` for the committed `eval_report.*` (no network). `live` mode
   is what originally produced `raw/`, and re-running it will overwrite `raw/`.
 - The mutation check uses a deterministic reference judge (see
-  `src/mutation_check.py`), not the LLM judge — it tests the scorer's gate
+  `src/mutation_check.py`), not the LLM judge, it tests the scorer's gate
   wiring, so it is intentionally offline and reproducible.
 - Model id `claude-sonnet-4-6` is recorded as used by the demo run. Verify the
   current id against the API docs before any new live run.

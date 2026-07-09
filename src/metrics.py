@@ -71,6 +71,6 @@ def plot_reliability(bins: List[dict], out_path: str) -> None:
     ax.set_xlabel("judge confidence"); ax.set_ylabel("empirical accuracy")
     ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.legend()
     ax.set_title("Judge reliability curve")
-    ax.text(0.5, -0.22, f"{total} verdicts — populated bins only",
+    ax.text(0.5, -0.22, f"{total} verdicts, populated bins only",
             transform=ax.transAxes, ha="center", fontsize=8, color="grey")
     fig.tight_layout(); fig.savefig(out_path, dpi=120); plt.close(fig)

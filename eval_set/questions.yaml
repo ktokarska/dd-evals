@@ -147,7 +147,7 @@ q19:
 # Second G3: genuinely-absent field for Verdant.
 # NOTE (2026-07-04): retargeted from "adverse media" to "beneficial ownership".
 # The adverse-media screen affirmatively states "No adverse media identified"
-# (adverse_media.md:10) — a present negative finding, so the not-found sentinel
+# (adverse_media.md:10), a present negative finding, so the not-found sentinel
 # was the wrong gold there. Beneficial ownership is genuinely absent from every
 # Verdant source (the sanctions report notes BO screening was limited because
 # director info was unavailable), so the sentinel is the correct faithful answer.
